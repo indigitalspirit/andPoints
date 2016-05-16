@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pick Point</string>
+    <string name="address">Address</string>
+    <string name="change">Change</string>
+    <string name="delivery">Delivery</string>
+    <string name="recieving">Recieving</string>
+    <string name="returning">Returning</string>
+    <string name="reports">Reports</string>
+</resources>
