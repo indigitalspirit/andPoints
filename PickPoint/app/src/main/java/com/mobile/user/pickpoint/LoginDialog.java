@@ -24,8 +24,6 @@ import android.widget.TextView.OnEditorActionListener;
 public class LoginDialog extends DialogFragment implements OnEditorActionListener {
 
 
-
-
     // specify interface, realize in MainActivity
     public interface EditAuthDialogListener {
         void OnFinishEditDialog(String login);

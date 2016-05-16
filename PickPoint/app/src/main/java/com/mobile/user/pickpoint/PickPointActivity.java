@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.mobile.user.pickpoint.LoginDialog.EditAuthDialogListener;
 
+import com.mobile.user.pickpoint.XmlParser;
 
 
 public class PickPointActivity extends FragmentActivity implements EditAuthDialogListener {
@@ -21,10 +22,30 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
 
     Button deliveryBtn, recievingBtn, returningBtn, reportsBtn;
     String tag = "Edit";
+    String key = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        try {
+            //xml = encryptedXml.GenerateXMLString(textToEncode);
+            //   Log.i("XML", xml);
+
+            new XmlParser(new XmlParser.AsyncResponse() {
+                @Override
+                public void processFinish(String output) {
+                    key = output;
+                    Log.i("XMLPARSER", key);
+                }
+            }).execute();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
 
         setContentView(R.layout.activity_pick_point);
@@ -53,6 +74,7 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
     public void OnFinishEditDialog(String login) {
         Log.i("LOGIN", login);
         setAllButtonsToClickable();
+
 
         //deliveryBtn = (Button) findViewById(R.id.deliveryButton);
 
