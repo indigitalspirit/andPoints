@@ -41,7 +41,7 @@ public class XmlParser extends AsyncTask<String, Void, String> {
     */
 
     public interface GetDataListener {
-        void onGetDataComplete(String result);//JSONArray result);
+        void onGetDataComplete(String result) throws IOException;//JSONArray result);
     }
 
 
@@ -79,10 +79,15 @@ public class XmlParser extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(String result)  {
         // Set title into TextView
         //xmlView.setText(result);
-        listener.onGetDataComplete(result);
+        try {
+            listener.onGetDataComplete(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         //txtkey.setText("PUBLICK KEY: \n" + key);
        // mProgressDialog.dismiss();

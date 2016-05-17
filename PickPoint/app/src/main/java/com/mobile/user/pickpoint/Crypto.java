@@ -86,11 +86,13 @@ public class Crypto {
         //strip the headers from the key string
         StringBuilder strippedKey = new StringBuilder();
         String lines[] = key.split("\n");
+
         for (String line : lines) {
             if (!line.contains("-----BEGIN PUBLIC KEY-----") && !line.contains("-----END PUBLIC KEY-----") && !Strings.isNullOrEmpty(line.trim())) {
                 strippedKey.append(line.trim());
             }
         }
+        Log.i("Stripped key", strippedKey.toString().trim());
         return strippedKey.toString().trim();
     }
 

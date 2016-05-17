@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlSerializer;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
@@ -18,6 +19,7 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.spec.RSAKeyGenParameterSpec;
+import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
 
@@ -113,8 +115,40 @@ public class CreateEncryptedXml {
     }
 
 
-    public static String encryptWithStoredKey(String text, String privateKey) {
-        String strippedKey = Crypto.stripPublicKeyHeaders(privateKey);
+
+
+    public static String encryptPublicKeyWithStoredKey(KeyPair keyPair, String server_pb_key) {
+
+
+        //Crypto.getRSAPublicKeyFromString(stored_PB_key)
+
+        StringWriter publicStringWriter = new StringWriter();
+        //Key pb_key = null;
+        String pb_key = null;
+
+        //original public key
+        //pb_key = keyPair.getPublic();
+        try {
+            PemWriter pemWriter = new PemWriter(publicStringWriter);
+            pemWriter.writeObject(new PemObject("PUBLIC KEY", keyPair.getPublic().getEncoded()));
+            pemWriter.flush();
+            pemWriter.close();
+
+            pb_key = publicStringWriter.toString();
+            pb_key = encryptWithKey(server_pb_key, pb_key);
+        } catch (IOException e) {
+            Log.e("EncryptPBKeyWithStKey", e.getMessage());
+            e.printStackTrace();
+        }
+
+
+
+        return pb_key;
+
+    }
+
+    public static String encryptWithStoredKey(String text, String key) {
+        String strippedKey = Crypto.stripPublicKeyHeaders(key);
         //String strippedKey = Crypto.stripPublicKeyHeaders(Preferences.getString(Preferences.RSA_PUBLIC_KEY));
 
         return encryptWithKey(strippedKey, text);
@@ -180,7 +214,7 @@ public class CreateEncryptedXml {
     /*_____________________________________TEXT DECRYPTION ENDS_____________________________*/
 
     /*_____________________________________XML SERIALAIZE START_____________________________*/
-    protected String GenerateXMLString(String text, String PB_key) throws IllegalArgumentException, IllegalStateException, IOException
+    protected String GenerateXMLString(String text, String stored_PB_key) throws IllegalArgumentException, IllegalStateException, IOException
     {
 
       //  Key[] keys = GenerateKeyPair();
@@ -193,7 +227,30 @@ public class CreateEncryptedXml {
 
         // Log.i("DECRIPTEDKEY", decodedText);
 
+        // generate key pairs
         KeyPair keys = generate();
+
+
+        // encrypt new publick key with stored public key
+        //String encryptToBase64(Key publicKey, String toBeCiphred) {
+
+        //String encryptedPublicKey = CreateEncryptedXml.encryptPublicKeyWithStoredKey(keys, stored_PB_key);
+       // try {
+            //PublicKey stored_PB_key_original =  Crypto.getRSAPublicKeyFromString(stored_PB_key);
+            String publicKeyPEM = Crypto.stripPublicKeyHeaders(stored_PB_key);
+            Log.i("Stripped KEY", publicKeyPEM);
+        System.out.println("Public key stripped");
+            System.out.println(publicKeyPEM);
+          //  KeyFactory keyFactory = KeyFactory.getInstance("RSA", "SC");
+         //   byte[] publicKeyBytes = org.spongycastle.util.encoders.Base64.decode(publicKeyPEM.getBytes("UTF-8"));
+       //     X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(publicKeyBytes);
+          //  return keyFactory.generatePublic(x509KeySpec);
+
+
+     //   } catch (Exception e) {
+           // e.printStackTrace();
+       // }
+
         //writePrivateKeyToPreferences(keys);
         //writePublicKeyToPreferences(keys);
 
@@ -204,7 +261,7 @@ public class CreateEncryptedXml {
         //privateKey = privateKey.trim();
 
         ///String publicKey = ConvertPublicKeyToString(keys);
-        String publicKey = "-----BEGIN PUBLIC KEY-----\n" +
+        /*String publicKey = "-----BEGIN PUBLIC KEY-----\n" +
                 "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyH1MfvponYs2JBPePSPC\n" +
                 "9CamTz0hh+4439Ie0PYowNANps2NdU1z+6up6oXQCQ9auODgVV9v3/rcObQLNmjH\n" +
                 "CUdgG80xbPocs5UmHGhrEBzDYN7ByBcMmSQRcwaXb5JLBno2eEVqhA0L/wBhJf7h\n" +
@@ -213,9 +270,9 @@ public class CreateEncryptedXml {
                 "Cz77h/4+fWCI5t2Qpx2I4qT1B8JYZOdRK0DpCiQOIsP8lqrE9tPGv4wg/yUu5KyV\n" +
                 "mwIDAQAB\n" +
                 "-----END PUBLIC KEY-----";
-
+        */
         //publicKey = Crypto.stripPublicKeyHeaders(publicKey);
-
+        /*
         String privateKey = "-----BEGIN PRIVATE KEY-----\n" +
                 "MIIBPQIBAAJBALqbHeRLCyOdykC5SDLqI49ArYGYG1mqaH9/GnWjGavZM02fos4l\n" +
                 "c2w6tCchcUBNtJvGqKwhC5JEnx3RYoSX2ucCAwEAAQJBAKn6O+tFFDt4MtBsNcDz\n" +
@@ -225,12 +282,18 @@ public class CreateEncryptedXml {
                 "vgPkZu2jDCo7trsCIQC/PSfRsnSkEqCX18GtKPCjfSH10WSsK5YRWAY3KcyLAQIh\n" +
                 "AL70wdUu5jMm2ex5cZGkZLRB50yE6rBiHCd5W1WdTFoe\n" +
                 "-----END PRIVATE KEY-----";
-
+        */
        // privateKey = Crypto.stripPrivateKeyHeaders(privateKey);
 
-        String encryptedMessage = CreateEncryptedXml.encryptWithStoredKey(text, PB_key);
+        String encryptedMessage = CreateEncryptedXml.encryptToBase64(keys.getPublic(), text);
+
+
         //String encryptedMessage = CreateEncryptedXml.encryptWithStoredKey(text, PB_key);
         //String decryptedMessage = CreateEncryptedXml.decryptWithStoredKey(encryptedMessage, privateKey);
+
+
+
+
 
 
         XmlSerializer xmlSerializer = Xml.newSerializer();
@@ -266,15 +329,15 @@ public class CreateEncryptedXml {
 
         //________________________________________KEY Tag
         xmlSerializer.startTag("", "pbkey");
-        xmlSerializer.text(publicKey);
-        //xmlSerializer.text(PB_key);
+        //xmlSerializer.text(encryptedPublicKey);
+        xmlSerializer.text(stored_PB_key);
         xmlSerializer.endTag("", "pbkey");
         //________________________________________
 
         //________________________________________PR KEY Tag
-        xmlSerializer.startTag("", "prkey");
-        xmlSerializer.text(privateKey);
-        xmlSerializer.endTag("", "prkey");
+      ///  xmlSerializer.startTag("", "prkey");
+       // xmlSerializer.text(privateKey);
+        //xmlSerializer.endTag("", "prkey");
         //________________________________________
 
 
@@ -286,6 +349,7 @@ public class CreateEncryptedXml {
 
         //________________________________________GPS Tag
         xmlSerializer.startTag("", "gps");
+
         xmlSerializer.startTag("", "X");
         xmlSerializer.text("coordinateX");
         xmlSerializer.endTag("", "X");
@@ -304,7 +368,7 @@ public class CreateEncryptedXml {
 
         String strXml = writer.toString();
 
-        System.out.print(strXml);
+        //System.out.print(strXml);
         return strXml;
         //System.out.println();
 

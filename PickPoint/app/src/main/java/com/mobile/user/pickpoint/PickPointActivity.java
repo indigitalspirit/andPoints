@@ -18,13 +18,15 @@ import com.mobile.user.pickpoint.XmlParser.GetDataListener;
 
 import com.mobile.user.pickpoint.XmlParser;
 
+import java.io.IOException;
+
 
 public class PickPointActivity extends FragmentActivity implements EditAuthDialogListener, GetDataListener {
 
 
     Button deliveryBtn, recievingBtn, returningBtn, reportsBtn;
     String tag = "Edit";
-    String PB_key = null;
+    String PB_key = null, xml=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,17 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
     public void onGetDataComplete(String result) {
             PB_key = result;
             Log.i("RESULT", PB_key);
+
+        //try {
+            CreateEncryptedXml encryptedXml = new CreateEncryptedXml();
+        try {
+            xml = encryptedXml.GenerateXMLString("Day", PB_key);
+           // Log.i("Created XML", xml);
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }
