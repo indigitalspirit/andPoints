@@ -14,12 +14,20 @@ import java.io.IOException;
  /*__________________________________________Start CLASS Public key AsyncTask_________________________*/
 public class XmlParser extends AsyncTask<String, Void, String> {
 
-    Integer desc_size;
-    String key = null, desc, imgSrc, imgCode, PB_key;
+    String key_text = "empty";
     byte[] finalDecodedBytes;
-    String url_key = "http://82.196.66.12:12173/my_public.pem";
+    private final static String url_key = "http://82.196.66.12:12173/my_public.pem";
+
+    private GetDataListener listener;
+
+    //Обратите внимание на конструктор! Тут мы получаем нашего делегата и сохраняем его.
+    XmlParser(GetDataListener listener)
+    {
+        this.listener = listener;
+    }
 
 
+    /*
     // you may separate this or combined to caller class.
     public interface AsyncResponse {
         void processFinish(String output);
@@ -30,7 +38,11 @@ public class XmlParser extends AsyncTask<String, Void, String> {
     public XmlParser(AsyncResponse delegate){
         this.delegate = delegate;
     }
+    */
 
+    public interface GetDataListener {
+        void onGetDataComplete(String result);//JSONArray result);
+    }
 
 
     @Override
@@ -52,28 +64,29 @@ public class XmlParser extends AsyncTask<String, Void, String> {
             Document document = Jsoup.connect(url_key).ignoreContentType(true).get();
 
             // Get the html document title
-            String key_text = document.text();
+
+            key_text = document.text();
             //key = key_text.replaceAll("\\s","");
             // key = key.replace("-----BEGINPUBLICKEY-----","");
             // key = key.replace("-----ENDPUBLICKEY-----", "");
             Log.i("PUBLICK KEY", key_text);
-            PB_key = key_text;
             // Locate the src attribute
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return PB_key;
+        return key_text;
     }
 
     @Override
     protected void onPostExecute(String result) {
         // Set title into TextView
         //xmlView.setText(result);
+        listener.onGetDataComplete(result);
 
         //txtkey.setText("PUBLICK KEY: \n" + key);
        // mProgressDialog.dismiss();
-        delegate.processFinish(result);
+        //delegate.processFinish(result);
     }
 }
     /*__________________________________________End CLASS Public key AsyncTask_________________________*/

@@ -13,16 +13,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import com.mobile.user.pickpoint.LoginDialog.EditAuthDialogListener;
+import com.mobile.user.pickpoint.XmlParser.GetDataListener;
+
 
 import com.mobile.user.pickpoint.XmlParser;
 
 
-public class PickPointActivity extends FragmentActivity implements EditAuthDialogListener {
+public class PickPointActivity extends FragmentActivity implements EditAuthDialogListener, GetDataListener {
 
 
     Button deliveryBtn, recievingBtn, returningBtn, reportsBtn;
     String tag = "Edit";
-    String key = null;
+    String PB_key = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +35,16 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
             //xml = encryptedXml.GenerateXMLString(textToEncode);
             //   Log.i("XML", xml);
 
+            /*
             new XmlParser(new XmlParser.AsyncResponse() {
                 @Override
                 public void processFinish(String output) {
-                    key = output;
-                    Log.i("XMLPARSER", key);
+                    //key = output;
+                    Log.i("XMLPARSER", output);
                 }
             }).execute();
+            */
+            new XmlParser(this).execute();
 
         }
         catch (Exception e) {
@@ -81,6 +86,13 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
     }
 
 
+    @Override
+    public void onGetDataComplete(String result) {
+            PB_key = result;
+            Log.i("RESULT", PB_key);
+
+
+    }
 }
 
 
