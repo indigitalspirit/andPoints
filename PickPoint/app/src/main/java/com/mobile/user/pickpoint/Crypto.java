@@ -12,12 +12,18 @@ import org.spongycastle.util.encoders.Base64;
 import org.spongycastle.util.io.pem.PemObject;
 import org.spongycastle.util.io.pem.PemWriter;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.security.KeyFactory;
 import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
@@ -60,10 +66,14 @@ public class Crypto {
 
     public static PublicKey getRSAPublicKeyFromString(String publicKeyPEM) throws Exception {
         publicKeyPEM = stripPublicKeyHeaders(publicKeyPEM);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA", "SC");
-        byte[] publicKeyBytes = Base64.decode(publicKeyPEM.getBytes("UTF-8"));
-        X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(publicKeyBytes);
-        return keyFactory.generatePublic(x509KeySpec);
+        //KeyFactory keyFactory = KeyFactory.getInstance("RSA", "SC");
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        //byte[] publicKeyBytes = Base64.decode(publicKeyPEM.getBytes("UTF-8"));
+        byte[] publicKeyBytes = Base64.decode(publicKeyPEM.getBytes());
+
+        //X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(publicKeyBytes);
+        PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(publicKeyBytes);
+        return keyFactory.generatePublic(privateKeySpec);
     }
 
     public static PrivateKey getRSAPrivateKeyFromString(String privateKeyPEM) throws Exception {
@@ -84,17 +94,49 @@ public class Crypto {
 
     public static String stripPublicKeyHeaders(String key) {
         //strip the headers from the key string
+        if (key.contains("-----BEGIN PUBLIC KEY-----")) {
+            key = key.replaceAll("-----BEGIN PUBLIC KEY-----", "");
+        }
+        if (key.contains("-----END PUBLIC KEY-----")) {
+            key = key.replaceAll("-----END PUBLIC KEY-----", "");
+        }
+        key = key.replaceAll("\\s+", "");
+        System.out.println("Stripped key: " + key);
+        return key;
+
+        /*
         StringBuilder strippedKey = new StringBuilder();
-        String lines[] = key.split("\n");
+        String lines[] = key.split("\\n");
+
+
 
         for (String line : lines) {
+            System.out.println("Line: " + line);
+            if (line.contains("-----BEGIN PUBLIC KEY-----")) {
+               line = line.replaceAll("-----BEGIN PUBLIC KEY-----", "");
+            }
+            if (line.contains("-----END PUBLIC KEY-----")) {
+                line = line.replaceAll("-----END PUBLIC KEY-----", "");
+            }
+            strippedKey.append(line.trim());
+            */
+            /*
             if (!line.contains("-----BEGIN PUBLIC KEY-----") && !line.contains("-----END PUBLIC KEY-----") && !Strings.isNullOrEmpty(line.trim())) {
                 strippedKey.append(line.trim());
+
             }
+
         }
-        Log.i("Stripped key", strippedKey.toString().trim());
-        return strippedKey.toString().trim();
+*/
+        //System.out.println("Stripped key: " + strippedKey.toString());
+        //return strippedKey.toString().trim();
+
     }
+
+
+
+
+
 
     public static String stripPrivateKeyHeaders(String key) {
         StringBuilder strippedKey = new StringBuilder();

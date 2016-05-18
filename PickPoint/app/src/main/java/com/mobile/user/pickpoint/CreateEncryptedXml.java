@@ -3,21 +3,30 @@ package com.mobile.user.pickpoint;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Xml;
+//import org.spongycastle.util.encoders.Base64;
 
 import org.spongycastle.util.io.pem.PemObject;
 import org.spongycastle.util.io.pem.PemWriter;
 import org.xmlpull.v1.XmlSerializer;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAKeyGenParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 
@@ -104,8 +113,9 @@ public class CreateEncryptedXml {
 
     public static byte[] encrypt(Key publicKey, byte[] toBeCiphred) {
         try {
-            //Cipher rsaCipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding", "SC");
-            Cipher rsaCipher = Cipher.getInstance("RSA", "SC");
+            Cipher rsaCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+            //Cipher rsaCipher = Cipher.getInstance("RSA", "SC");
+            //Cipher rsaCipher = Cipher.getInstance("RSA", "BC");
             rsaCipher.init(Cipher.ENCRYPT_MODE, publicKey);
             return rsaCipher.doFinal(toBeCiphred);
         } catch (Exception e) {
@@ -162,6 +172,7 @@ public class CreateEncryptedXml {
     public static String encryptWithKey(String key, String text) {
         try {
             PublicKey apiPublicKey = Crypto.getRSAPublicKeyFromString(key);
+            //PublicKey apiPublicKey = CreateEncryptedXml.getPublicKeyFromPemFormat(key, false);
             return encryptToBase64(apiPublicKey, text);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -213,6 +224,65 @@ public class CreateEncryptedXml {
 
     /*_____________________________________TEXT DECRYPTION ENDS_____________________________*/
 
+
+
+    /**
+     *
+     * @param PEMString  -A file/string in .pem format with a generated RSA key (with "des3", using "openssl genrsa".)
+     * @param isFilePath - If it's a file path or a string
+     * @return java.security.PublicKey
+     * @throws IOException -No key found
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     *
+     * @author hsigmond
+     */
+
+    private static PublicKey getPublicKeyFromPemFormat(String PEMString,
+                                                       boolean isFilePath) throws IOException, NoSuchAlgorithmException,
+            InvalidKeySpecException {
+
+        BufferedReader pemReader = null;
+        if (isFilePath) {
+            pemReader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(PEMString)));
+        } else {
+            pemReader = new BufferedReader(new InputStreamReader(
+                    new ByteArrayInputStream(PEMString.getBytes("UTF-8"))));
+        }
+        StringBuffer content = new StringBuffer();
+        String line = null;
+        /*
+        while ((line = pemReader.readLine()) != null) {
+            if (line.indexOf("-----BEGIN PUBLIC KEY-----") != -1) {
+                while ((line = pemReader.readLine()) != null) {
+                    if (line.indexOf("-----END PUBLIC KEY") != -1) {
+                        break;
+                    }
+                    content.append(line.trim());
+                }
+                break;
+            }
+        }
+        */
+        line = pemReader.readLine();
+        line = line.replace("-----BEGIN PUBLIC KEY-----", "");
+        line = line.replace("-----END PUBLIC KEY-----", "");
+        line = line.replace("\\s+", "");
+        content.append(line.trim());
+
+        if (line == null) {
+            throw new IOException("PUBLIC KEY" + " not found");
+        }
+        Log.i("PUBLIC KEY: ", "PEM content = : " + content.toString());
+
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        return keyFactory.generatePublic(new X509EncodedKeySpec(Base64.decode(content.toString(), Base64.DEFAULT)));
+
+    }
+
+
+
     /*_____________________________________XML SERIALAIZE START_____________________________*/
     protected String GenerateXMLString(String text, String stored_PB_key) throws IllegalArgumentException, IllegalStateException, IOException
     {
@@ -235,21 +305,57 @@ public class CreateEncryptedXml {
         //String encryptToBase64(Key publicKey, String toBeCiphred) {
 
         //String encryptedPublicKey = CreateEncryptedXml.encryptPublicKeyWithStoredKey(keys, stored_PB_key);
-       // try {
-            //PublicKey stored_PB_key_original =  Crypto.getRSAPublicKeyFromString(stored_PB_key);
-            String publicKeyPEM = Crypto.stripPublicKeyHeaders(stored_PB_key);
-            Log.i("Stripped KEY", publicKeyPEM);
-        System.out.println("Public key stripped");
-            System.out.println(publicKeyPEM);
-          //  KeyFactory keyFactory = KeyFactory.getInstance("RSA", "SC");
-         //   byte[] publicKeyBytes = org.spongycastle.util.encoders.Base64.decode(publicKeyPEM.getBytes("UTF-8"));
-       //     X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(publicKeyBytes);
-          //  return keyFactory.generatePublic(x509KeySpec);
+        try {
+           // PublicKey stored_PB_key_original =  Crypto.getRSAPublicKeyFromString(stored_PB_key);
+           // Log.i("Stored KEY", stored_PB_key);
+            //String publicKeyPEM = Crypto.stripPublicKeyHeaders(stored_PB_key);
+         //   Log.i("Stripped KEY", publicKeyPEM);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String encryptedPublicKey = null;
+
+        /*
+        File pubKeyFile = new File("public.der");
+        DataInputStream dis = new DataInputStream();
+        byte[] keyBytes = new byte[(int) stored_PB_key.length()];
+
+        dis.readFully(keyBytes);
+        dis.close();
+        */
+        ///http://www.androidsnippets.com/encrypt-decrypt-between-android-and-php.html
+        //https://gist.github.com/frostymarvelous/c17e6c3b2098a9c5d04d
+        //https://schneimi.wordpress.com/2008/11/25/rsa-encryption-between-java-and-php/
+       // http://stackoverflow.com/questions/11410770/load-rsa-public-key-from-file
+        //http://stackoverflow.com/questions/7037780/convert-php-rsa-publickey-into-android-publickey
+
+        byte[] keyBytes = org.spongycastle.util.encoders.Base64.decode(stored_PB_key.getBytes());
+
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            RSAPublicKey publicKey = (RSAPublicKey)keyFactory.generatePublic(keySpec);
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] encrypted = cipher.doFinal(text.getBytes());
+
+            encryptedPublicKey =  Base64.encodeToString(encrypted, Base64.DEFAULT);
+            System.out.println("ENCRYPTED" + encryptedPublicKey);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
-     //   } catch (Exception e) {
-           // e.printStackTrace();
-       // }
+
+
+
+
+
+
+
 
         //writePrivateKeyToPreferences(keys);
         //writePublicKeyToPreferences(keys);
@@ -329,8 +435,8 @@ public class CreateEncryptedXml {
 
         //________________________________________KEY Tag
         xmlSerializer.startTag("", "pbkey");
-        //xmlSerializer.text(encryptedPublicKey);
-        xmlSerializer.text(stored_PB_key);
+        xmlSerializer.text(encryptedPublicKey);
+        //xmlSerializer.text(stored_PB_key);
         xmlSerializer.endTag("", "pbkey");
         //________________________________________
 
