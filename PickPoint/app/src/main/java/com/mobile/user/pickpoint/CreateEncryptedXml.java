@@ -66,7 +66,7 @@ public class CreateEncryptedXml {
 
 
 
-    public String ConvertPublicKeyToString(KeyPair key) {
+    public static String ConvertPublicKeyToString(KeyPair key) {
         StringWriter publicStringWriter = new StringWriter();
         String pb_key = null;
 
@@ -269,6 +269,7 @@ public class CreateEncryptedXml {
         line = line.replace("-----BEGIN PUBLIC KEY-----", "");
         line = line.replace("-----END PUBLIC KEY-----", "");
         line = line.replace("\\s+", "");
+        line = line.replace(" ", "");
         content.append(line.trim());
 
         if (line == null) {
@@ -283,123 +284,26 @@ public class CreateEncryptedXml {
 
 
 
+
     /*_____________________________________XML SERIALAIZE START_____________________________*/
     protected String GenerateXMLString(String text, String stored_PB_key) throws IllegalArgumentException, IllegalStateException, IOException
     {
 
-      //  Key[] keys = GenerateKeyPair();
-
-       // String publicKey = EncodeKeyToString(keys[0], true);
-       // String privateKey = EncodeKeyToString(keys[1], false);
-
-        //String encodedText = EncryptText(keys[1], text);
-        //String decodedText = DecryptText(encodedText, keys[0], publicKey);
-
-        // Log.i("DECRIPTEDKEY", decodedText);
 
         // generate key pairs
         KeyPair keys = generate();
-
-
-        // encrypt new publick key with stored public key
-        //String encryptToBase64(Key publicKey, String toBeCiphred) {
-
-        //String encryptedPublicKey = CreateEncryptedXml.encryptPublicKeyWithStoredKey(keys, stored_PB_key);
-        try {
-           // PublicKey stored_PB_key_original =  Crypto.getRSAPublicKeyFromString(stored_PB_key);
-           // Log.i("Stored KEY", stored_PB_key);
-            //String publicKeyPEM = Crypto.stripPublicKeyHeaders(stored_PB_key);
-         //   Log.i("Stripped KEY", publicKeyPEM);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String encryptedMessage = CreateEncryptedXml.encryptToBase64(keys.getPublic(), text);
 
         String encryptedPublicKey = null;
 
-        /*
-        File pubKeyFile = new File("public.der");
-        DataInputStream dis = new DataInputStream();
-        byte[] keyBytes = new byte[(int) stored_PB_key.length()];
-
-        dis.readFully(keyBytes);
-        dis.close();
-        */
-        ///http://www.androidsnippets.com/encrypt-decrypt-between-android-and-php.html
-        //https://gist.github.com/frostymarvelous/c17e6c3b2098a9c5d04d
-        //https://schneimi.wordpress.com/2008/11/25/rsa-encryption-between-java-and-php/
-       // http://stackoverflow.com/questions/11410770/load-rsa-public-key-from-file
-        //http://stackoverflow.com/questions/7037780/convert-php-rsa-publickey-into-android-publickey
-
-        byte[] keyBytes = org.spongycastle.util.encoders.Base64.decode(stored_PB_key.getBytes());
-
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            RSAPublicKey publicKey = (RSAPublicKey)keyFactory.generatePublic(keySpec);
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1PADDING");
-            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            byte[] encrypted = cipher.doFinal(text.getBytes());
-
-            encryptedPublicKey =  Base64.encodeToString(encrypted, Base64.DEFAULT);
-            System.out.println("ENCRYPTED" + encryptedPublicKey);
-
-        } catch (Exception e) {
+            Key publicKeyStored = getPublicKeyFromPemFormat(stored_PB_key, false);
+            encryptedPublicKey = encryptToBase64(publicKeyStored, CreateEncryptedXml.ConvertPublicKeyToString( keys));
+            Log.i("PUBLIC KEY ENCRYPTED: ", encryptedPublicKey);
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
-
-
-
-
-
-
-        //writePrivateKeyToPreferences(keys);
-        //writePublicKeyToPreferences(keys);
-
-        //String privateKey = stripPrivateKeyHeaders(Preferences.getString(Preferences.RSA_PRIVATE_KEY));
-        //String publicKey = stripPublicKeyHeaders(Preferences.getString(Preferences.RSA_PUBLIC_KEY));
-
-        //String privateKey = ConvertPrivateKeyToString(keys);
-        //privateKey = privateKey.trim();
-
-        ///String publicKey = ConvertPublicKeyToString(keys);
-        /*String publicKey = "-----BEGIN PUBLIC KEY-----\n" +
-                "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyH1MfvponYs2JBPePSPC\n" +
-                "9CamTz0hh+4439Ie0PYowNANps2NdU1z+6up6oXQCQ9auODgVV9v3/rcObQLNmjH\n" +
-                "CUdgG80xbPocs5UmHGhrEBzDYN7ByBcMmSQRcwaXb5JLBno2eEVqhA0L/wBhJf7h\n" +
-                "3IwHXxX8cR+wegwVLTjTzo4zUyFjS3ZRilYjuowPzopWF9DOVVArE2MKbMHCHpI8\n" +
-                "/ufvruCudJAfdDvlUxxNyfHHcr3oeWzmzmekf2MDjIVzfWNl2udk/AofECQNuijy\n" +
-                "Cz77h/4+fWCI5t2Qpx2I4qT1B8JYZOdRK0DpCiQOIsP8lqrE9tPGv4wg/yUu5KyV\n" +
-                "mwIDAQAB\n" +
-                "-----END PUBLIC KEY-----";
-        */
-        //publicKey = Crypto.stripPublicKeyHeaders(publicKey);
-        /*
-        String privateKey = "-----BEGIN PRIVATE KEY-----\n" +
-                "MIIBPQIBAAJBALqbHeRLCyOdykC5SDLqI49ArYGYG1mqaH9/GnWjGavZM02fos4l\n" +
-                "c2w6tCchcUBNtJvGqKwhC5JEnx3RYoSX2ucCAwEAAQJBAKn6O+tFFDt4MtBsNcDz\n" +
-                "GDsYDjQbCubNW+yvKbn4PJ0UZoEebwmvH1ouKaUuacJcsiQkKzTHleu4krYGUGO1\n" +
-                "mEECIQD0dUhj71vb1rN1pmTOhQOGB9GN1mygcxaIFOWW8znLRwIhAMNqlfLijUs6\n" +
-                "rY+h1pJa/3Fh1HTSOCCCCWA0NRFnMANhAiEAwddKGqxPO6goz26s2rHQlHQYr47K\n" +
-                "vgPkZu2jDCo7trsCIQC/PSfRsnSkEqCX18GtKPCjfSH10WSsK5YRWAY3KcyLAQIh\n" +
-                "AL70wdUu5jMm2ex5cZGkZLRB50yE6rBiHCd5W1WdTFoe\n" +
-                "-----END PRIVATE KEY-----";
-        */
-       // privateKey = Crypto.stripPrivateKeyHeaders(privateKey);
-
-        String encryptedMessage = CreateEncryptedXml.encryptToBase64(keys.getPublic(), text);
-
-
-        //String encryptedMessage = CreateEncryptedXml.encryptWithStoredKey(text, PB_key);
-        //String decryptedMessage = CreateEncryptedXml.decryptWithStoredKey(encryptedMessage, privateKey);
-
-
-
-
 
 
         XmlSerializer xmlSerializer = Xml.newSerializer();
