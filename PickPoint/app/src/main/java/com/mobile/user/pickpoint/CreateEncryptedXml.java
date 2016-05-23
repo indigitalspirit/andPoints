@@ -226,48 +226,24 @@ public class CreateEncryptedXml {
 
 
 
-    /**
-     *
-     * @param PEMString  -A file/string in .pem format with a generated RSA key (with "des3", using "openssl genrsa".)
-     * @param isFilePath - If it's a file path or a string
-     * @return java.security.PublicKey
-     * @throws IOException -No key found
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
-     *
-     * @author hsigmond
-     */
 
-    private static PublicKey getPublicKeyFromPemFormat(String PEMString,
-                                                       boolean isFilePath) throws IOException, NoSuchAlgorithmException,
-            InvalidKeySpecException {
 
+    private static String encryptDataWithStoredKey (String stored_key, String data) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        //read key from string
         BufferedReader pemReader = null;
-        if (isFilePath) {
-            pemReader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(PEMString)));
-        } else {
-            pemReader = new BufferedReader(new InputStreamReader(
-                    new ByteArrayInputStream(PEMString.getBytes("UTF-8"))));
-        }
+        pemReader = new BufferedReader(new InputStreamReader(
+                new ByteArrayInputStream(stored_key.getBytes("UTF-8"))));
+
+
+        //remove key tags (BEGIN ... END ...)
         StringBuffer content = new StringBuffer();
         String line = null;
-        /*
-        while ((line = pemReader.readLine()) != null) {
-            if (line.indexOf("-----BEGIN PUBLIC KEY-----") != -1) {
-                while ((line = pemReader.readLine()) != null) {
-                    if (line.indexOf("-----END PUBLIC KEY") != -1) {
-                        break;
-                    }
-                    content.append(line.trim());
-                }
-                break;
-            }
-        }
-        */
+
         line = pemReader.readLine();
         line = line.replace("-----BEGIN PUBLIC KEY-----", "");
         line = line.replace("-----END PUBLIC KEY-----", "");
+        line = line.replace("-----BEGIN RSA PUBLIC KEY-----", "");
+        line = line.replace("-----END RSA PUBLIC KEY-----", "");
         line = line.replace("\\s+", "");
         line = line.replace(" ", "");
         content.append(line.trim());
@@ -277,10 +253,34 @@ public class CreateEncryptedXml {
         }
         Log.i("PUBLIC KEY: ", "PEM content = : " + content.toString());
 
+        //get public key from string
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return keyFactory.generatePublic(new X509EncodedKeySpec(Base64.decode(content.toString(), Base64.DEFAULT)));
+        PublicKey pub_key = keyFactory.generatePublic(new X509EncodedKeySpec(Base64.decode(content.toString(), Base64.DEFAULT)));
 
+
+        // encryption
+        byte[] toBeCiphred = data.getBytes();
+        String encryptedData = null;
+
+        try {
+            Cipher rsaCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+            //Cipher rsaCipher = Cipher.getInstance("RSA", "SC");
+            //Cipher rsaCipher = Cipher.getInstance("RSA", "BC");
+            rsaCipher.init(Cipher.ENCRYPT_MODE, pub_key);
+            byte[] cyphredText = rsaCipher.doFinal(toBeCiphred);
+            encryptedData = Base64.encodeToString(cyphredText, Base64.DEFAULT);
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error while encrypting data: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+
+
+        return encryptedData;
     }
+
+
 
 
 
@@ -292,14 +292,13 @@ public class CreateEncryptedXml {
 
         // generate key pairs
         KeyPair keys = generate();
-        String encryptedMessage = CreateEncryptedXml.encryptToBase64(keys.getPublic(), text);
 
-        String encryptedPublicKey = null;
+        String encryptedData = null;
 
         try {
-            Key publicKeyStored = getPublicKeyFromPemFormat(stored_PB_key, false);
-            encryptedPublicKey = encryptToBase64(publicKeyStored, CreateEncryptedXml.ConvertPublicKeyToString( keys));
-            Log.i("PUBLIC KEY ENCRYPTED: ", encryptedPublicKey);
+            encryptedData = encryptDataWithStoredKey(stored_PB_key, text);
+
+            Log.i("DATA ENCRYPTED: ", encryptedData);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -325,7 +324,7 @@ public class CreateEncryptedXml {
 
         //________________________________________TEXT Tag
         xmlSerializer.startTag("", "text");
-        xmlSerializer.text(encryptedMessage);
+        xmlSerializer.text(encryptedData);
         xmlSerializer.endTag("", "text");
 
        // xmlSerializer.startTag("", "decrypted");
@@ -339,7 +338,7 @@ public class CreateEncryptedXml {
 
         //________________________________________KEY Tag
         xmlSerializer.startTag("", "pbkey");
-        xmlSerializer.text(encryptedPublicKey);
+        xmlSerializer.text(encryptedData);
         //xmlSerializer.text(stored_PB_key);
         xmlSerializer.endTag("", "pbkey");
         //________________________________________
@@ -378,7 +377,7 @@ public class CreateEncryptedXml {
 
         String strXml = writer.toString();
 
-        //System.out.print(strXml);
+        System.out.print(strXml);
         return strXml;
         //System.out.println();
 

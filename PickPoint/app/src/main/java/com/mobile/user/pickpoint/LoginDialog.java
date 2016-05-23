@@ -47,10 +47,11 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
         //v.findViewById(R.id.cancelButton).setOnClickListener(this);
         getDialog().setTitle("Login!");
 
-        //getDialog().setCancelable(false);
+        getDialog().setCancelable(false);
+
 
         //dismiss back tap
-        //getDialog().setCanceledOnTouchOutside(false);
+        getDialog().setCanceledOnTouchOutside(false);
 
         // Show soft keyboard automatically
         loginEdit.requestFocus();

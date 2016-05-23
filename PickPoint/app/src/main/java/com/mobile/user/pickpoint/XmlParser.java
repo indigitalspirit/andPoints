@@ -16,7 +16,7 @@ public class XmlParser extends AsyncTask<String, Void, String> {
 
     String key_text = "empty";
     byte[] finalDecodedBytes;
-    private final static String url_key = "http://82.196.66.12:12173/public.pem";//"http://82.196.66.12:12173/my_public.der";
+    private final static String url_key = "http://82.196.66.12:12173/my_public.pem";//"http://82.196.66.12:12173/my_public.der";
 
     private GetDataListener listener;
 
@@ -63,14 +63,9 @@ public class XmlParser extends AsyncTask<String, Void, String> {
             // Connect to the web site
             Document document = Jsoup.connect(url_key).ignoreContentType(true).get();
 
-            // Get the html document title
-
+            // Get key text
             key_text = document.text();
-            //key = key_text.replaceAll("\\s","");
-            // key = key.replace("-----BEGINPUBLICKEY-----","");
-            // key = key.replace("-----ENDPUBLICKEY-----", "");
-            Log.i("PUBLICK KEY", key_text);
-            // Locate the src attribute
+            Log.i("PUBLIC KEY", key_text);
 
         } catch (IOException e) {
             e.printStackTrace();
