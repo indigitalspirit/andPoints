@@ -31,6 +31,8 @@ import java.security.spec.RSAKeyGenParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.spec.SecretKeySpec;
 
 //import java.util.prefs.Preferences;
 
@@ -65,6 +67,46 @@ public class CreateEncryptedXml {
         }
 
 
+
+    public static  SecretKeySpec generateSymmetric() {
+        // Original text
+        String theTestText = "This is just a simple test";
+
+        // Set up secret key spec for 128-bit AES encryption and decryption
+        SecretKeySpec sks = null;
+        try {
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+            sr.setSeed("any data used as random seed".getBytes());
+            KeyGenerator kg = KeyGenerator.getInstance("AES");
+            kg.init(128, sr);
+            sks = new SecretKeySpec((kg.generateKey()).getEncoded(), "AES");
+        } catch (Exception e) {
+            Log.e(TAG, "AES secret key spec error");
+        }
+        return sks;
+    }
+
+
+
+    public static String ConvertSymmetricKeyToString(SecretKeySpec key) {
+        StringWriter publicStringWriter = new StringWriter();
+        String symmetric_key = null;
+
+        /*
+        try {
+            PemWriter pemWriter = new PemWriter(publicStringWriter);
+            pemWriter.writeObject(new PemObject("", key.getEncoded()));
+            pemWriter.flush();
+            pemWriter.close();
+            symmetric_key = publicStringWriter.toString();//Preferences.putString(Preferences.RSA_PUBLIC_KEY, publicStringWriter.toString());
+        } catch (IOException e) {
+            Log.e("RSA", e.getMessage());
+            e.printStackTrace();
+        }
+        */
+            symmetric_key = Base64.encodeToString(key.getEncoded(), Base64.DEFAULT);;
+        return symmetric_key;
+    }
 
     public static String ConvertPublicKeyToString(KeyPair key) {
         StringWriter publicStringWriter = new StringWriter();
@@ -263,11 +305,13 @@ public class CreateEncryptedXml {
         String encryptedData = null;
 
         try {
+           // Cipher rsaCipher = Cipher.getInstance("RSA");
             Cipher rsaCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
             //Cipher rsaCipher = Cipher.getInstance("RSA", "SC");
             //Cipher rsaCipher = Cipher.getInstance("RSA", "BC");
             rsaCipher.init(Cipher.ENCRYPT_MODE, pub_key);
             byte[] cyphredText = rsaCipher.doFinal(toBeCiphred);
+            System.out.println("BYTE STRING: " + cyphredText);
             encryptedData = Base64.encodeToString(cyphredText, Base64.DEFAULT);
 
         } catch (Exception e) {
@@ -279,6 +323,32 @@ public class CreateEncryptedXml {
 
         return encryptedData;
     }
+
+
+    private static String encryptDataWithSymmetricKey (SecretKeySpec symmKey, String data) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        //read key from string
+
+        // encryption
+        byte[] toBeCiphred = data.getBytes();
+        String encryptedData = null;
+
+        try {
+            //Cipher c = Cipher.getInstance("AES/CBC/NoPadding");
+            Cipher c = Cipher.getInstance("AES");
+            c.init(Cipher.ENCRYPT_MODE, symmKey);
+            byte[] encodedBytes = c.doFinal(toBeCiphred);
+            System.out.println("BYTE STRING (ASYMM): " + encodedBytes);
+            encryptedData = Base64.encodeToString(encodedBytes, Base64.DEFAULT);
+
+        } catch (Exception e) {
+            Log.e(TAG, "AES encryption error");
+            throw new RuntimeException(e);
+        }
+
+
+        return encryptedData;
+    }
+
 
 
 
@@ -293,12 +363,28 @@ public class CreateEncryptedXml {
         // generate key pairs
         KeyPair keys = generate();
 
-        String encryptedData = null;
+        SecretKeySpec symmKey = generateSymmetric();
+
+        String newPublicKeyString = null;
+        String newPrivateKeyString = null;
+        String newSymmetricKeyString = null;
+
+        newSymmetricKeyString = CreateEncryptedXml.ConvertSymmetricKeyToString(symmKey);
+        newPublicKeyString = CreateEncryptedXml.ConvertPublicKeyToString(keys);
+        newPrivateKeyString = ConvertPrivateKeyToString(keys);
+
+        String encryptedData = "text";
+        String encryptedPublicKey = null;
+        String encryptedPrivateKey = null;
+        String encryptedSymmetricKey = null;
+
+
 
         try {
-            encryptedData = encryptDataWithStoredKey(stored_PB_key, text);
-
-            Log.i("DATA ENCRYPTED: ", encryptedData);
+            Log.i("newPrivateKeyString", newPublicKeyString);
+            encryptedSymmetricKey = encryptDataWithStoredKey(stored_PB_key, newSymmetricKeyString);
+            encryptedData = encryptDataWithSymmetricKey(symmKey, text);
+            Log.i("PB_KEY ENCRYPTED: ", encryptedSymmetricKey);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -327,20 +413,12 @@ public class CreateEncryptedXml {
         xmlSerializer.text(encryptedData);
         xmlSerializer.endTag("", "text");
 
-       // xmlSerializer.startTag("", "decrypted");
-     //   xmlSerializer.text(decryptedMessage);
-       // xmlSerializer.endTag("", "decrypted");
-        //________________________________________
-
-        //xmlSerializer.startTag("", "dec_text");
-        //xmlSerializer.text(decodedText);
-        //xmlSerializer.endTag("", "dec_text");
 
         //________________________________________KEY Tag
-        xmlSerializer.startTag("", "pbkey");
-        xmlSerializer.text(encryptedData);
+        xmlSerializer.startTag("", "prkey");
+        xmlSerializer.text(encryptedSymmetricKey);
         //xmlSerializer.text(stored_PB_key);
-        xmlSerializer.endTag("", "pbkey");
+        xmlSerializer.endTag("", "prkey");
         //________________________________________
 
         //________________________________________PR KEY Tag

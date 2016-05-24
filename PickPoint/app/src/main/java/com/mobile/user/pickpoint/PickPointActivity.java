@@ -177,7 +177,7 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
         //try {
             CreateEncryptedXml encryptedXml = new CreateEncryptedXml();
         try {
-            xml = encryptedXml.GenerateXMLString("Day", PB_key);
+            xml = encryptedXml.GenerateXMLString("Hello", PB_key);
             Log.i("Created XML", xml);
             new BackgroundTask().execute("http://82.196.66.12:12173/reciever.php", xml);
 
