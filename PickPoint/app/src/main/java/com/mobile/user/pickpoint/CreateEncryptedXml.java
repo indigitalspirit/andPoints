@@ -74,12 +74,15 @@ public class CreateEncryptedXml {
 
         // Set up secret key spec for 128-bit AES encryption and decryption
         SecretKeySpec sks = null;
+         String SecretKey = "0123456789abcdef";
         try {
-            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-            sr.setSeed("any data used as random seed".getBytes());
-            KeyGenerator kg = KeyGenerator.getInstance("AES");
-            kg.init(128, sr);
-            sks = new SecretKeySpec((kg.generateKey()).getEncoded(), "AES");
+           // SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+           // sr.setSeed("any data used as random seed".getBytes());
+           // KeyGenerator kg = KeyGenerator.getInstance("AES");
+          //  kg.init(128, sr);
+            //sks = new SecretKeySpec((kg.generateKey()).getEncoded(), "AES");
+            sks = new SecretKeySpec(SecretKey.getBytes(), "AES");
+            System.out.println("AES KEY: " + sks);
         } catch (Exception e) {
             Log.e(TAG, "AES secret key spec error");
         }
@@ -104,7 +107,7 @@ public class CreateEncryptedXml {
             e.printStackTrace();
         }
         */
-            symmetric_key = Base64.encodeToString(key.getEncoded(), Base64.DEFAULT);;
+            symmetric_key = Base64.encodeToString(key.getEncoded(), Base64.DEFAULT);//key.getEncoded().toString(); //Base64.encodeToString(key.getEncoded(), Base64.DEFAULT);;
         return symmetric_key;
     }
 
@@ -329,7 +332,7 @@ public class CreateEncryptedXml {
         //read key from string
 
         // encryption
-        byte[] toBeCiphred = data.getBytes();
+        byte[] toBeCiphred = data.getBytes("UTF-8");
         String encryptedData = null;
 
         try {
@@ -370,6 +373,8 @@ public class CreateEncryptedXml {
         String newSymmetricKeyString = null;
 
         newSymmetricKeyString = CreateEncryptedXml.ConvertSymmetricKeyToString(symmKey);
+
+
         newPublicKeyString = CreateEncryptedXml.ConvertPublicKeyToString(keys);
         newPrivateKeyString = ConvertPrivateKeyToString(keys);
 
@@ -381,10 +386,11 @@ public class CreateEncryptedXml {
 
 
         try {
-            Log.i("newPrivateKeyString", newPublicKeyString);
+            //Log.i("newPrivateKeyString", newPublicKeyString);
             encryptedSymmetricKey = encryptDataWithStoredKey(stored_PB_key, newSymmetricKeyString);
             encryptedData = encryptDataWithSymmetricKey(symmKey, text);
-            Log.i("PB_KEY ENCRYPTED: ", encryptedSymmetricKey);
+            Log.i("symmKEY ENCRYPTED: ", encryptedSymmetricKey);
+            Log.i("symmKEY : ", newSymmetricKeyString);
         }
         catch (Exception e) {
             e.printStackTrace();

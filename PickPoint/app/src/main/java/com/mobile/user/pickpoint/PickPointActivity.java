@@ -98,8 +98,9 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("OkHttp :", result);
+           Log.i("OkHttp :", result);
             //xmlResponse.setText(result);
+           // System.out.print(result);
 
         }
 
