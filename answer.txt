@@ -1,0 +1,2 @@
+XML Recieved. Encrypted key:    Decrypted key: 
+Fatal error: Call to undefined function mcrypt_module_open() in /var/www/html/reciever.php on line 86
