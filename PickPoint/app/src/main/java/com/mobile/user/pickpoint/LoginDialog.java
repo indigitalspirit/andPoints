@@ -81,12 +81,12 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
             Log.i("ON EDITOR ACTION", "Done tapped");
             login = loginEdit.getText().toString();
 
-            if(checkLogin(login)) {
+          //  if(checkLogin(login)) {
                 // Return input text to activity
                 EditAuthDialogListener activity = (EditAuthDialogListener) getActivity();
                 activity.OnFinishEditDialog(login, true);
                 this.dismiss();
-            }
+            //}
             return true;
         }
         return false;

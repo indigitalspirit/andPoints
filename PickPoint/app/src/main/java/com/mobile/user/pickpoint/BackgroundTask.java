@@ -3,6 +3,9 @@ package com.mobile.user.pickpoint;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -48,6 +51,16 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
     }
 
 
+    String deserializeJson(String jsonData) throws JSONException {
+        //String jsonData = response.body().string();
+        JSONObject jsonObject = new JSONObject(jsonData);
+        String codecheck = jsonObject.getString("codecheck");
+       // JSONObject jObj = new JSONObject(jsonData);
+
+
+        return codecheck;
+    }
+
     @Override
     protected String doInBackground(String... params) {
         Response response = null;
@@ -85,10 +98,22 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
         try {
             response = client.newCall(request).execute();
-            Log.i("Response", response.toString());
-            return response.body().string();
+            Log.i("Response", response.body().toString());
+
+            //String jsonData = response.body().string();
+            //JSONObject Jobject = new JSONObject(jsonData);
+           // String codecheck = Jobject.getString("codecheck");
+
+            String codecheck = deserializeJson(response.body().string());
+
+
+            return codecheck;
+            //return
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         //return response.body().string();

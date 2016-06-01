@@ -34,6 +34,7 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
     Button deliveryBtn, recievingBtn, returningBtn, reportsBtn;
     String tag = "Edit";
     String PB_key = null, encryptedJSONstring=null, userLogin =  null;
+    Boolean authorized = false;
 
 
 
@@ -102,10 +103,10 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
             e.printStackTrace();
         }
 
-        if(correct) {
-            setContentView(R.layout.activity_pick_point);
-            setAllButtonsToClickable();
-        }
+        //if(authorized) {
+          //  setContentView(R.layout.activity_pick_point);
+          //  setAllButtonsToClickable();
+       // }
 
 
 
@@ -117,7 +118,15 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
     @Override
     public void onGetDataComplete(String result) {
             PB_key = result;
-            Log.i("RESULT ", PB_key);
+            Log.i("RESULT ", result);
+
+        if(result.contentEquals("OK")) {
+            authorized = true;
+            Log.i("AUTHORISED ", result);
+            setContentView(R.layout.activity_pick_point);
+            setAllButtonsToClickable();
+        }
+
         //return PB_key;
 
         //try {
