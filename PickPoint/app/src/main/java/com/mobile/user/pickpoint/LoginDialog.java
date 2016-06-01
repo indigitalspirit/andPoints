@@ -26,7 +26,7 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
 
     // specify interface, realize in MainActivity
     public interface EditAuthDialogListener {
-        void OnFinishEditDialog(String login);
+        void OnFinishEditDialog(String login, Boolean correct);
 
     }
 
@@ -84,7 +84,7 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
             if(checkLogin(login)) {
                 // Return input text to activity
                 EditAuthDialogListener activity = (EditAuthDialogListener) getActivity();
-                activity.OnFinishEditDialog(login);
+                activity.OnFinishEditDialog(login, true);
                 this.dismiss();
             }
             return true;

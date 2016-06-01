@@ -52,9 +52,9 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * Created by user on 25.04.16.
  */
-public class CreateEncryptedXml {
+public class CreateEncryptedJSON {
 
-    private static final String TAG = CreateEncryptedXml.class.getSimpleName();
+    private static final String TAG = CreateEncryptedJSON.class.getSimpleName();
     private static final int KEY_SIZE = 1024;
     private String iv = "fedcba9876543210";//Dummy iv (CHANGE IT!)
     private String SecretKey = "0123456789abcdef";//Dummy secretKey (CHANGE IT!)
@@ -401,7 +401,7 @@ public class CreateEncryptedXml {
 
             encryptedKey = encryptDataWithStoredKey(stored_PB_key, SecretKey);
             encryptedVi = encryptDataWithStoredKey(stored_PB_key, iv);
-            //encryptedData = encryptWithMCrypt("linux");
+            encryptedData = encryptWithMCrypt(login);
 
             //Log.i("ENCRYPTED (mcrypt): ", encryptedData);
             //Log.i("symmKEY ENCRYPTED: ", encryptedSymmetricKey);
@@ -416,14 +416,14 @@ public class CreateEncryptedXml {
             // Here we convert Java Object to JSON
             JSONObject jsonObj = new JSONObject();
 
-            jsonObj.put("login", login); // Set the first name/pair
+            jsonObj.put("login", encryptedData); // Set the first name/pair
 
             jsonObj.put("keyparam1", encryptedKey);
             jsonObj.put("keyparam2", encryptedVi);
 
 
 
-            JSONObject jsonAdd = new JSONObject(); // we need another object to store the address
+            /*JSONObject jsonAdd = new JSONObject(); // we need another object to store the address
 
             jsonAdd.put("address", person.getAddress().getAddress());
 
@@ -463,23 +463,19 @@ public class CreateEncryptedXml {
             jsonObj.put("phoneNumber", jsonArr);
 
 
+    */
 
-
-
-
+            System.out.print("JSON object" + jsonObj.toString());
+            return jsonObj.toString();
 
         }
 
-        catch(JSONException ex) {
-
-        ex.printStackTrace();
-
-    } catch (JSONException e) {
+     catch (JSONException e) {
             e.printStackTrace();
         }
 
 
-        return jsonObj.toString();
+        return null;
 
 
 
