@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class XmlParser extends AsyncTask<String, Void, String> {
     */
 
     public interface GetDataListener {
-        void onGetDataComplete(String result) throws IOException;//JSONArray result);
+        void onGetDataComplete(String result, String classTag) throws IOException, JSONException;//JSONArray result);
     }
 
 
@@ -78,7 +79,7 @@ public class XmlParser extends AsyncTask<String, Void, String> {
         // Set title into TextView
         //xmlView.setText(result);
         try {
-            listener.onGetDataComplete(result);
+            listener.onGetDataComplete(result, "xml");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -24,12 +24,12 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
     private final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
-    private XmlParser.GetDataListener listener1;
+    private XmlParser.GetDataListener listener;
 
     //Обратите внимание на конструктор! Тут мы получаем нашего делегата и сохраняем его.
-    BackgroundTask(XmlParser.GetDataListener listener1)
+    BackgroundTask(XmlParser.GetDataListener listener)
     {
-       this.listener1 = listener1;
+       this.listener = listener;
     }
 
 
@@ -50,7 +50,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
         void onGetDataComplete(String result) throws IOException;//JSONArray result);
     }
 
-
+    /*
     String deserializeJson(String jsonData) throws JSONException {
         //String jsonData = response.body().string();
         JSONObject jsonObject = new JSONObject(jsonData);
@@ -60,6 +60,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
         return codecheck;
     }
+    */
 
     @Override
     protected String doInBackground(String... params) {
@@ -98,22 +99,20 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
         try {
             response = client.newCall(request).execute();
-            Log.i("Response", response.body().toString());
+            Log.i("Response Bg Task", response.body().toString());
 
             //String jsonData = response.body().string();
             //JSONObject Jobject = new JSONObject(jsonData);
            // String codecheck = Jobject.getString("codecheck");
 
-            String codecheck = deserializeJson(response.body().string());
+           // String codecheck = deserializeJson(response.body().string());
 
 
-            return codecheck;
-            //return
+           // return codecheck;
+            return response.body().string();
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JSONException e) {
             e.printStackTrace();
         }
         //return response.body().string();
@@ -134,7 +133,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
         // unpack json
 
         try {
-            listener1.onGetDataComplete(result);
+            listener.onGetDataComplete(result, "json");
         } catch (Exception e) {
             e.printStackTrace();
         }

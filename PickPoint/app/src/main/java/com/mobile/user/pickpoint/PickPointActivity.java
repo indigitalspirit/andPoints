@@ -13,13 +13,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
 import com.mobile.user.pickpoint.LoginDialog.EditAuthDialogListener;
 import com.mobile.user.pickpoint.XmlParser.GetDataListener;
 
 
 import com.mobile.user.pickpoint.XmlParser;
 
+import org.json.JSONException;
+
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -33,11 +38,11 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
 
     Button deliveryBtn, recievingBtn, returningBtn, reportsBtn;
     String tag = "Edit";
-    String PB_key = null, encryptedJSONstring=null, userLogin =  null;
+    String PB_key = null, encryptedJSONstring = null, userLogin = null;
     Boolean authorized = false;
 
-
-
+    FragmentManager fm = getSupportFragmentManager();
+    LoginDialog myLoginDialog = new LoginDialog();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +64,14 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
             */
             new XmlParser(this).execute();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        FragmentManager fm = getSupportFragmentManager();
-        LoginDialog myLoginDialog = new LoginDialog();
+
         myLoginDialog.show(fm, "edit");
+        myLoginDialog.setCancelable(false);
         //new CustomDialogFragment().show();
     }
 
@@ -98,16 +102,14 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
             Log.i("Created JSON object", encryptedJSONstring);
             new BackgroundTask(this).execute("http://82.196.66.12:12173/reciever.php", encryptedJSONstring);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         //if(authorized) {
-          //  setContentView(R.layout.activity_pick_point);
-          //  setAllButtonsToClickable();
-       // }
-
+        //  setContentView(R.layout.activity_pick_point);
+        //  setAllButtonsToClickable();
+        // }
 
 
         //deliveryBtn = (Button) findViewById(R.id.deliveryButton);
@@ -116,15 +118,49 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
 
 
     @Override
-    public void onGetDataComplete(String result) {
+    public void onGetDataComplete(String result, String classTag) throws IOException, JSONException {
+
+        if (classTag.contentEquals("xml")) {
             PB_key = result;
             Log.i("RESULT ", result);
+        } else if (classTag.contentEquals("json")) {
+            CharSequence code = null;
+            ArrayList responseArray = new ArrayList();
+            Log.i("RESULT JSON", result);
 
-        if(result.contentEquals("OK")) {
-            authorized = true;
-            Log.i("AUTHORISED ", result);
-            setContentView(R.layout.activity_pick_point);
-            setAllButtonsToClickable();
+
+            try {
+                //code = new JsonParser().ParseJsonString(result);
+
+                responseArray = new JsonParser().ParseJsonString(result);
+                //editResult.setText((CharSequence) catnamesList.get(0));
+                code = (CharSequence) responseArray.get(0);
+
+
+
+                //if (code.contentEquals("OK")) {
+                if (code.toString().contentEquals("OK")) {
+                    authorized = true;
+                    Log.i("AUTHORISED ", code.toString());
+                    //myLoginDialog.dismiss();
+                    ArrayList addresses = (ArrayList) responseArray.get(1);
+
+                    setContentView(R.layout.activity_pick_point);
+                    setAllButtonsToClickable();
+                    TextView viewResult;
+                    viewResult = (TextView) findViewById(R.id.address_view);
+                    viewResult.setText(addresses.get(0).toString() + " " + addresses.get(1).toString() + " " + addresses.get(2).toString());
+
+
+                } else if (code.toString().contentEquals("FAIL")) {
+
+                    Log.i("NOT AUTHORISED ", code.toString());
+                    myLoginDialog.show(fm, "edit");
+                    myLoginDialog.setCancelable(false);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         //return PB_key;
@@ -144,7 +180,12 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
     */
 
     }
+}
 
+
+
+
+/***********************************************************************/
 
     //public void onGetDataComplete(String result) {
         //PB_key = result;
@@ -166,7 +207,7 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
     */
 
    // }
-}
+
 
 
 
