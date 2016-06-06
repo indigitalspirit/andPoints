@@ -150,11 +150,13 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
                     TextView viewResult;
                     viewResult = (TextView) findViewById(R.id.address_view);
                     viewResult.setText(addresses.get(0).toString() + " " + addresses.get(1).toString() + " " + addresses.get(2).toString());
+                    myLoginDialog.dismiss();
 
 
                 } else if (code.toString().contentEquals("FAIL")) {
 
                     Log.i("NOT AUTHORISED ", code.toString());
+                    myLoginDialog.changeTitle();
                     myLoginDialog.show(fm, "edit");
                     myLoginDialog.setCancelable(false);
                 }

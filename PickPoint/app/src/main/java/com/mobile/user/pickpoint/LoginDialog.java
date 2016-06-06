@@ -2,6 +2,7 @@ package com.mobile.user.pickpoint;
 
 import android.app.Activity;
 
+import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -46,6 +47,8 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
         //v.findViewById(R.id.loginButton).setOnClickListener(this);
         //v.findViewById(R.id.cancelButton).setOnClickListener(this);
         getDialog().setTitle("Login!");
+        //Message msg = 'fgf';
+
 
         getDialog().setCancelable(false);
 
@@ -69,6 +72,31 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
         }
 
        return false;
+    }
+
+    public void changeTitle() {
+        //EditText loginEdit;
+       // View v = inflater.inflate(R.layout.activity_login, container);
+        //loginEdit = (EditText) v.findViewById(R.id.idText);
+        //v.findViewById(R.id.loginButton).setOnClickListener(this);
+        //v.findViewById(R.id.cancelButton).setOnClickListener(this);
+        this.getDialog().setTitle("Wrong, try again!");
+        //Message msg = 'fgf';
+
+
+        //getDialog().setCancelable(false);
+
+
+        //dismiss back tap
+        //getDialog().setCanceledOnTouchOutside(false);
+
+        // Show soft keyboard automatically
+       // loginEdit.requestFocus();
+        //loginEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
+       // loginEdit.setSingleLine();
+        //loginEdit.setOnEditorActionListener(this);
+
+
     }
 
     @Override
