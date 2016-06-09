@@ -4,16 +4,22 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobile.user.pickpoint.LoginDialog.EditAuthDialogListener;
 import com.mobile.user.pickpoint.XmlParser.GetDataListener;
@@ -33,13 +39,18 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-public class PickPointActivity extends FragmentActivity implements EditAuthDialogListener, GetDataListener {
+public class PickPointActivity extends FragmentActivity implements EditAuthDialogListener, GetDataListener, AdapterView.OnItemSelectedListener {
 
 
     Button deliveryBtn, recievingBtn, returningBtn, reportsBtn;
     String tag = "Edit";
     String PB_key = null, encryptedJSONstring = null, userLogin = null;
     Boolean authorized = false;
+    SharedPreferences sp;
+    private TextView selection;
+    Spinner spinner;
+
+
 
     FragmentManager fm = getSupportFragmentManager();
     LoginDialog myLoginDialog = new LoginDialog();
@@ -47,6 +58,8 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
 
         try {
@@ -73,6 +86,21 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
         myLoginDialog.show(fm, "edit");
         myLoginDialog.setCancelable(false);
         //new CustomDialogFragment().show();
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+
+       // int initialposition=spinner.getSelectedItemPosition();
+      ///  spinner.setSelection(initialposition, true);
+        //parent.setSelection(item.position);
+
+        // Showing selected spinner item
+       // Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 
     //realize EditAuthorDialog Listener interface
@@ -145,18 +173,41 @@ public class PickPointActivity extends FragmentActivity implements EditAuthDialo
                     //myLoginDialog.dismiss();
                     ArrayList addresses = (ArrayList) responseArray.get(1);
 
+
+
                     setContentView(R.layout.activity_pick_point);
                     setAllButtonsToClickable();
-                    TextView viewResult;
-                    viewResult = (TextView) findViewById(R.id.address_view);
-                    viewResult.setText(addresses.get(0).toString() + " " + addresses.get(1).toString() + " " + addresses.get(2).toString());
+                    //TextView viewResult;
+                    //viewResult = (TextView) findViewById(R.id.address_view);
+                   // viewResult.setText(addresses.get(0).toString() + " " + addresses.get(1).toString() + " " + addresses.get(2).toString());
+
+                    spinner =  (Spinner) findViewById(R.id.address_spinner);
+
+                    // Spinner click listener
+                    spinner.setOnItemSelectedListener(this);
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                            R.layout.support_simple_spinner_dropdown_item, addresses);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(dataAdapter);
+                  //  adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+                  //  spinner.setAdapter(adapter);
+
                     myLoginDialog.dismiss();
 
 
                 } else if (code.toString().contentEquals("FAIL")) {
 
                     Log.i("NOT AUTHORISED ", code.toString());
-                    myLoginDialog.changeTitle();
+                    // Showing selected spinner item
+                    Toast toast = Toast.makeText(getApplicationContext(), this.getString(R.string.wrong_login) ,
+                            Toast.LENGTH_SHORT);
+                    //toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
+                    //toast.getDuration();
+                    //Toast.makeText(, "Selected: " + item, Toast.LENGTH_LONG).show();
+
+                    //myLoginDialog.changeTitle();
                     myLoginDialog.show(fm, "edit");
                     myLoginDialog.setCancelable(false);
                 }

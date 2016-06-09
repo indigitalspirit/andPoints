@@ -67,9 +67,12 @@ public class JsonParser {
                     String city = json_data.getString("city");
                     String street = json_data.getString("street");
 
-                    jsonResultListPoint.add(name);
-                    jsonResultListPoint.add(city);
-                    jsonResultListPoint.add(street);
+                    String hole_address = name+' '+city+' '+street;
+
+                    jsonResultListPoint.add(hole_address);
+                 //   jsonResultListPoint.add(city);
+                 //   jsonResultListPoint.add(street);
+                  //  jsonResultList.add(codecheck);
 
                 }
             /*

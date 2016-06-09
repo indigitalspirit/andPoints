@@ -46,7 +46,7 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
         loginEdit = (EditText) v.findViewById(R.id.idText);
         //v.findViewById(R.id.loginButton).setOnClickListener(this);
         //v.findViewById(R.id.cancelButton).setOnClickListener(this);
-        getDialog().setTitle("Login!");
+        getDialog().setTitle(R.string.login);
         //Message msg = 'fgf';
 
 

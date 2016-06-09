@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Пункт доставки</string>
-    <string name="address">Адрес</string>
+    <string name="address">Адрес:</string>
     <string name="change">Изменить</string>
+    <string name="delivery">Доставка</string>
+    <string name="recieving">Получить</string>
+    <string name="returning">Возврат</string>
+    <string name="reports">Отчеты</string>
+    <string name="wrong_login">Неверный пароль</string>
+    <string name="login">Введите пароль</string>
 </resources>
+
