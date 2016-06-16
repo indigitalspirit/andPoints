@@ -47,10 +47,12 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
         //v.findViewById(R.id.loginButton).setOnClickListener(this);
         //v.findViewById(R.id.cancelButton).setOnClickListener(this);
         getDialog().setTitle(R.string.login);
+
         //Message msg = 'fgf';
 
 
         getDialog().setCancelable(false);
+
 
 
         //dismiss back tap
@@ -108,12 +110,15 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
 
             Log.i("ON EDITOR ACTION", "Done tapped");
             login = loginEdit.getText().toString();
+            loginEdit.setText("");
 
           //  if(checkLogin(login)) {
                 // Return input text to activity
                 EditAuthDialogListener activity = (EditAuthDialogListener) getActivity();
                 activity.OnFinishEditDialog(login, true);
+
                 this.dismiss();
+
             //}
             return true;
         }

@@ -4,18 +4,22 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#eee">
+    android:paddingTop="50dp"
+    style="@style/AppTheme">
+   <!--android:background="#eee"-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:orientation="horizontal"
-        android:background="#eee">
+       >
 
         <TextView
             android:id="@+id/address_view"
+
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="@string/address"/>
@@ -28,8 +32,10 @@
 
         <Spinner
             android:id="@+id/address_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="270dp"
+            android:layout_height="60dp"
+            android:textSize="20sp"
+
 
             >
         </Spinner>
@@ -38,19 +44,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:gravity="center_horizontal"
-        android:layout_marginTop="60dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="70dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         >
 
         <Button
             android:id="@+id/deliveryButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:clickable="false"
+            android:background="@color/colorPrimary"
             android:text="@string/delivery"/>
 
 
@@ -58,46 +65,50 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:gravity="center_horizontal"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="70dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         >
 
         <Button
             android:id="@+id/recieveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="152dp"
+            android:layout_height="73dp"
+            android:layout_marginRight="8dp"
             android:layout_gravity="center"
             android:clickable="false"
-            android:layout_marginRight="25dp"
+            android:background="@color/colorPrimary"
+
 
             android:text="@string/recieving"/>
         <Button
             android:id="@+id/returnButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="152dp"
+            android:layout_height="73dp"
+            android:layout_marginLeft="8dp"
             android:layout_gravity="center"
             android:clickable="false"
-            android:layout_marginLeft="10dp"
+            android:background="@color/colorPrimary"
             android:text="@string/returning"/>
 
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:gravity="center_horizontal"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="70dp">
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
 
         <Button
             android:id="@+id/reportsButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:clickable="false"
+            android:background="@color/colorPrimary"
             android:text="@string/reports"/>
 
 
