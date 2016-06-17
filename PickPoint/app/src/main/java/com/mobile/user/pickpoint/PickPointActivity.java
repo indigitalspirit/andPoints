@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
@@ -78,6 +79,16 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
 
     }
 
+
+    public void showDelivery(View view)
+    {
+        Intent intent = new Intent(PickPointActivity.this, DeliveryActivity.class);
+        startActivity(intent);
+    }
+
+
+
+
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString();
@@ -148,29 +159,15 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
 
                     //setContentView(R.layout.activity_pick_point);
                     setContentView(R.layout.menu);
+
                     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
                     toolbar.setLogo(R.drawable.icon);
 
                     setSupportActionBar(toolbar);
-
-                   // FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                  //  fab.setOnClickListener(new View.OnClickListener() {
-                   //     @Override
-                  //      public void onClick(View view) {
-                    //        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                  //                  .setAction("Action", null).show();
-                  //      }
-                //    });
-
-
-
                     setAllButtonsToClickable();
                     myLoginDialog.dismiss();
 
-
                     spinner =  (Spinner) findViewById(R.id.address_spinner);
-
-
                     spinner.setOnItemSelectedListener(this);
 
                     ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,

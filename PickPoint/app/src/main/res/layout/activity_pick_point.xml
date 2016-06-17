@@ -82,12 +82,13 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:clickable="false"
+            android:clickable="true"
             android:background="@color/colorPrimary"
             android:textSize="8pt"
             android:textColor="#ffffff"
             android:textStyle="bold"
-            android:text="@string/delivery"/>
+            android:text="@string/delivery"
+            android:onClick="showDelivery"/>
 
 
     </LinearLayout>

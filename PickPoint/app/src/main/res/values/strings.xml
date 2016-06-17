@@ -8,5 +8,8 @@
     <string name="returning">Returning</string>
     <string name="reports">Reports</string>
     <string name="wrong_login">Wrong password</string>
-    <string name="login">Enter password</string>
+    <string name="login">Enter password:</string>
+
+    <string name="enter_code">Enter parcel code:</string>
+    <string name="wrong_delivery_code">Wrong delivery code</string>
 </resources>
