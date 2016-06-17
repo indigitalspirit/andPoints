@@ -149,6 +149,8 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
                     //setContentView(R.layout.activity_pick_point);
                     setContentView(R.layout.menu);
                     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                    toolbar.setLogo(R.drawable.icon);
+
                     setSupportActionBar(toolbar);
 
                    // FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

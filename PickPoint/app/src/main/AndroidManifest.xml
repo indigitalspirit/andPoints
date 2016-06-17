@@ -12,7 +12,11 @@
         <activity android:name=".PickPointActivity"
             android:label="@string/app_name"
             android:icon="@mipmap/ic_launcher"
-            android:theme="@style/AppTheme.NoActionBar">
+
+            android:theme="@style/AppTheme.NoActionBar"
+            android:textSize="8pt"
+            android:textColor="#ffffff"
+            android:textStyle="bold">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
