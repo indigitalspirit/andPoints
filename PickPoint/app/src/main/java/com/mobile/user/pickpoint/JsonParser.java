@@ -44,44 +44,55 @@ public class JsonParser {
             ArrayList jsonResultList = new ArrayList();
             jsonResultList.add(codecheck);
 
+
             if(codecheck.contentEquals("OK")) {
-                String user_id = jsonObject.getString("id");
-                String msg = jsonObject.getString("message");
+
+
+                String user_id = "usr_id";//jsonObject.getString("id");
+                String msg = "msg";//jsonObject.getString("message");
 
                 // = new JSONObject(); // we need another object to store the address
-
+                /**
                 JSONObject jsonSettings = jsonObject.getJSONObject("settings");
                 String update_period = jsonSettings.getString("update_period");
 
                 JSONArray jArray = jsonObject.getJSONArray("address");
 
                 System.out.println("*****JARRAY*****" + jArray.length());
-
+                **/
 
                 ArrayList jsonResultListPoint = new ArrayList();
 
+                /*
                 for (int i = 0; i < jArray.length(); i++) {
                     JSONObject json_data = jArray.getJSONObject(i);
 
                     String name = json_data.getString("name");
                     String city = json_data.getString("city");
                     String street = json_data.getString("street");
+                */
 
-                    String hole_address = name+' '+city+' '+street;
+                    //String hole_address = name+' '+city+' '+street;
+
+                for (int i = 0; i < 2; i++) {
+                    String hole_address = "addr1";
 
                     jsonResultListPoint.add(hole_address);
+                }
                  //   jsonResultListPoint.add(city);
                  //   jsonResultListPoint.add(street);
                   //  jsonResultList.add(codecheck);
 
-                }
-            /*
-            JSONObject jsonAddress = jsonObject.getJSONObject("address");
 
-            String name = jsonAddress.getString("name");
-            String city = jsonAddress.getString("city");
-            String street = jsonAddress.getString("street");
-               */
+
+
+
+            //JSONObject jsonAddress = jsonObject.getJSONObject("address");
+
+            //String name = jsonAddress.getString("name");
+            //String city = jsonAddress.getString("city");
+            //String street = jsonAddress.getString("street");
+
 
 
 
@@ -90,7 +101,7 @@ public class JsonParser {
 
                 Log.i("JS parser user_id ", user_id);
                 Log.i("JS parser msg ", msg);
-                Log.i("JS parser upd ", update_period);
+               // Log.i("JS parser upd ", update_period);
                 //if(codecheck.contentEquals("OK")) {
 
                 // Log.i("CODECHECK ", "OK");
@@ -99,6 +110,7 @@ public class JsonParser {
 
                 // }
             }
+
             return jsonResultList;
 
 

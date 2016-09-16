@@ -121,7 +121,7 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
         try {
             encryptedJSONstring = encryptedJSONcontent.JsonSerialaizer(userLogin, PB_key);
             Log.i("Created JSON object", encryptedJSONstring);
-            new BackgroundTask(this).execute("http://82.196.66.12:12173/reciever.php", encryptedJSONstring);
+            new BackgroundTask(this).execute("http://nastya.boincfast.ru/reciever_json.php", encryptedJSONstring);
 
         } catch (Exception e) {
             e.printStackTrace();

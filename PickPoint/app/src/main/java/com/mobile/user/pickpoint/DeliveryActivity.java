@@ -35,9 +35,8 @@ public class DeliveryActivity extends AppCompatActivity {
         Boolean right_code = checkCode(codeEditor);
 
 
-
         //Intent intent = new Intent(PickPointActivity.this, DeliveryActivity.class);
-       // startActivity(intent);
+        //startActivity(intent);
     }
 
     private Boolean checkCode(EditText codeEditor) throws IOException {
@@ -45,17 +44,30 @@ public class DeliveryActivity extends AppCompatActivity {
         try {
             String entered_code = codeEditor.getText().toString();
 
+            /*
             if(entered_code.contentEquals("-1")) {
 
                 Toast toast = Toast.makeText(getApplicationContext(), this.getString(R.string.wrong_delivery_code) ,
-                        Toast.LENGTH_SHORT);
+                        Toast.LENGTH_LONG);
 
                 toast.show();
             }
             else if (entered_code.contentEquals("1")) {
-                Intent intent = new Intent(DeliveryActivity.this, ParcelInfoActivity.class);
+
+                Toast toast = Toast.makeText(getApplicationContext(), this.getString(R.string.wrong_delivery_code) ,
+                        Toast.LENGTH_LONG);
+
+                toast.show();
+                Intent intent = new Intent(DeliveryActivity.this, ParcelScanInfoActivity.class);
                  startActivity(intent);
             }
+            */
+           // if(!entered_code.isEmpty()) {
+
+            Intent intent = new Intent(DeliveryActivity.this, ParcelScanInfoActivity.class);
+            startActivity(intent);
+           // }
+
 
         }
         catch (Exception e) {

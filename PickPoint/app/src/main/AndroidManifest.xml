@@ -25,8 +25,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".DeliveryActivity" />
-        <activity android:name=".ParcelInfoActivity" />
+        <activity android:name=".ParcelScanInfoActivity" />
         <activity android:name=".ParcelArrangingActivity"></activity>
+
     </application>
 
 </manifest>

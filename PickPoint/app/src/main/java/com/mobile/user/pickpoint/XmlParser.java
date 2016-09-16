@@ -17,7 +17,7 @@ public class XmlParser extends AsyncTask<String, Void, String> {
 
     String key_text = "empty";
     byte[] finalDecodedBytes;
-    private final static String url_key = "http://82.196.66.12:12173/my_public.pem";//"http://82.196.66.12:12173/my_public.der";
+    private final static String url_key = "http://nastya.boincfast.ru/public.pem";//"http://82.196.66.12:12173/my_public.der";
 
     private GetDataListener listener;
 
