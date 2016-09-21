@@ -3,7 +3,7 @@
     <string name="app_name">  Пункт доставки</string>
     <string name="address">Адрес:</string>
     <string name="change">Изменить</string>
-    <string name="delivery">Выдача отправлений</string>
+    <string name="delivery">Готово</string>
     <string name="recieving">Получить</string>
     <string name="returning">Возврат</string>
     <string name="reports">Отчеты</string>

@@ -69,7 +69,6 @@
                 android:layout_width="326dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="2dp"
-
                 />
 
 
@@ -98,6 +97,7 @@
             android:textStyle="bold"
             android:text="@string/delivery"
             android:onClick="showDeliveryInfo"/>
+
 
 
     </LinearLayout>

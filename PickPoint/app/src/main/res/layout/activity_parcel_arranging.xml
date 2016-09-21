@@ -9,4 +9,101 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mobile.user.pickpoint.ParcelArrangingActivity">
 
+    <LinearLayout
+        android:layout_width="335dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="5dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="320dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+
+            android:clickable="true"
+            android:background="@color/colorTrue"
+            android:textSize="8pt"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textAlignment="center"
+
+            android:text="PRICE:"
+
+
+            />
+
+        <TextView
+            android:id="@+id/open"
+            android:layout_marginTop="60dp"
+            android:layout_width="320dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:background="@color/colorFalse"
+            android:textSize="8pt"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textAlignment="center"
+
+            android:text="OPEN:"
+
+
+            />
+
+
+
+    </LinearLayout>
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+
+        android:layout_marginTop="360dp"
+        android:layout_marginStart="15dp"
+        android:gravity="center"
+        android:layout_marginEnd="15dp"
+        >
+
+        <Button
+            android:id="@+id/createContentButton"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+
+            android:layout_marginEnd="40dp"
+            android:clickable="true"
+            android:background="@color/colorPrimary"
+            android:textSize="8pt"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="Order"
+            android:onClick="orderParcel"
+            />
+
+        <Button
+            android:id="@+id/goBackButton"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+
+            android:layout_marginStart="40dp"
+            android:clickable="true"
+            android:background="@color/colorPrimary"
+            android:textSize="8pt"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="Back"
+            android:onClick="goBack"
+            />
+
+
+    </LinearLayout>
+
+
 </RelativeLayout>

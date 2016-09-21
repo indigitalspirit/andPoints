@@ -26,7 +26,8 @@
         </activity>
         <activity android:name=".DeliveryActivity" />
         <activity android:name=".ParcelScanInfoActivity" />
-        <activity android:name=".ParcelArrangingActivity"></activity>
+        <activity android:name=".ParcelArrangingActivity"/>
+        <activity android:name=".ParcelFormalizeActivity"/>
 
     </application>
 
