@@ -21,10 +21,16 @@ public class ParcelArrangingActivity extends AppCompatActivity {
 
     public void orderParcel(View view) {
 
-
-
                 Intent intent = new Intent(ParcelArrangingActivity.this, ParcelFormalizeActivity.class);
                 startActivity(intent);
+
+    }
+
+
+    public void goBack(View view) {
+
+        Intent intent = new Intent(ParcelArrangingActivity.this, ParcelScanInfoActivity.class);
+        startActivity(intent);
 
     }
 

@@ -73,9 +73,12 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+       // Intent intent = new Intent(PickPointActivity.this, LoginHeadPiece.class);
+        //startActivity(intent);
+    /**** 28.09 ***/
         myLoginDialog.show(fm, "edit");
         myLoginDialog.setCancelable(false);
+
 
     }
 

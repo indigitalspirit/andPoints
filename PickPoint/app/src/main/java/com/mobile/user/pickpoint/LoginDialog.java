@@ -32,6 +32,8 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
     }
 
     private EditText loginEdit;
+    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnDel, btnOk;
+
 
     // empty constractor
     public LoginDialog() {
@@ -44,6 +46,9 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
 
         View v = inflater.inflate(R.layout.activity_login, container);
         loginEdit = (EditText) v.findViewById(R.id.idText);
+        //View v = inflater.inflate(R.layout.keyboard, container);
+        //loginEdit = (EditText) v.findViewById(R.id.password);
+
         //v.findViewById(R.id.loginButton).setOnClickListener(this);
         //v.findViewById(R.id.cancelButton).setOnClickListener(this);
         getDialog().setTitle(R.string.login);
@@ -63,6 +68,9 @@ public class LoginDialog extends DialogFragment implements OnEditorActionListene
         loginEdit.setImeOptions(EditorInfo.IME_ACTION_DONE);
         loginEdit.setSingleLine();
         loginEdit.setOnEditorActionListener(this);
+
+
+
 
         return v;
     }

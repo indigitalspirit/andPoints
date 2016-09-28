@@ -12,4 +12,6 @@
 
     <string name="enter_code">Enter parcel code:</string>
     <string name="wrong_delivery_code">Wrong delivery code</string>
+    <string name="price">Price</string>
+    <string name="open">Open</string>
 </resources>
