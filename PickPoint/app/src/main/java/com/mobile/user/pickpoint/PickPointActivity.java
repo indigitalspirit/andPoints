@@ -3,9 +3,13 @@ package com.mobile.user.pickpoint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -68,7 +72,23 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
 
         try {
 
-            new XmlParser(this).execute();
+            Boolean startParsing = false;
+
+            startParsing = isNetworkAvailable(this);
+
+            if(startParsing) {
+                new XmlParser(this).execute();
+            }
+            else {
+                Toast toast = Toast.makeText(getApplicationContext(), this.getString(R.string.no_internet_connection) ,
+                        Toast.LENGTH_SHORT);
+
+                toast.show();
+
+                myLoginDialog.show(fm, "edit");
+                myLoginDialog.setCancelable(false);
+
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,6 +153,23 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
 
     }
 
+
+    public static boolean isNetworkAvailable(Context context) {
+        try {
+            ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            if (null != activeNetwork) {
+                if((activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) || (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE))
+                    return true;
+            }
+
+
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
 
 
     @Override

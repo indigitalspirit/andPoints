@@ -9,9 +9,12 @@
     <string name="reports">Отчеты</string>
     <string name="wrong_login">Неверный пароль</string>
     <string name="login">Введите пароль:</string>
+    <string name="no_internet_connection">Нет соединения с интернетом</string>
 
 
     <string name="enter_code">Введите код отправления:</string>
     <string name="wrong_delivery_code">Неверный код отправления</string>
+    <string name="price">Стоимость</string>
+    <string name="open">Открытие</string>
 </resources>
 

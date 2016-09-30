@@ -37,20 +37,22 @@
 
 
     <LinearLayout
-        android:layout_width="335dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+
         android:layout_marginTop="70dp"
-        android:layout_marginEnd="5dp"
+
+        android:gravity="center"
         android:orientation="horizontal"
         android:background="@color/colorPrimary">
 
 
 
         <LinearLayout
-            android:layout_width="333dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
+            android:layout_gravity="center"
             android:layout_marginStart="1dp"
             android:layout_marginTop="1dp"
             android:layout_marginBottom="1dp"
@@ -66,9 +68,10 @@
             <EditText
                 android:id="@+id/code_editor"
                 android:inputType="textNoSuggestions"
-                android:layout_width="326dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="2dp"
+                android:layout_gravity="center"
                 />
 
 

@@ -1,8 +1,12 @@
 package com.mobile.user.pickpoint;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.jsoup.Jsoup;
@@ -62,6 +66,10 @@ public class XmlParser extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         try {
             // Connect to the web site
+           // Context context = new Context() {
+            //};
+
+
             Document document = Jsoup.connect(url_key).ignoreContentType(true).get();
 
             // Get key text
@@ -73,6 +81,8 @@ public class XmlParser extends AsyncTask<String, Void, String> {
         }
         return key_text;
     }
+
+
 
     @Override
     protected void onPostExecute(String result)  {

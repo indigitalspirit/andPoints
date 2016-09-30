@@ -5,16 +5,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.mobile.user.pickpoint.IntentIntegrator;
 import com.mobile.user.pickpoint.IntentResult;
 
 
 public class ParcelScanInfoActivity extends AppCompatActivity {
 
+
+    protected TextView scannedInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parcel_info);
+
+        scannedInfo = (TextView) findViewById(R.id.parcel_info2);
     }
 
     public void showParcelArranging(View view)
@@ -59,8 +67,14 @@ public class ParcelScanInfoActivity extends AppCompatActivity {
                 IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (result != null) {
             String contents = result.getContents();
+            String scanFormat = result.getFormatName();
             if (contents != null) {
                 Log.i("BARCODE SCANNED", contents);
+                scannedInfo.setText(scanFormat+ ": " + contents);
+                Toast toast = Toast.makeText(getApplicationContext(), "Сканирование завершено" ,
+                        Toast.LENGTH_SHORT);
+                toast.show();
+
             } else {
                 Log.i("BARCODE NOT SCANNED", "");
             }
