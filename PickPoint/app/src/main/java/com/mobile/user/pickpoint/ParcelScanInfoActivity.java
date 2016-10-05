@@ -70,7 +70,8 @@ public class ParcelScanInfoActivity extends AppCompatActivity {
             String scanFormat = result.getFormatName();
             if (contents != null) {
                 Log.i("BARCODE SCANNED", contents);
-                scannedInfo.setText(scanFormat+ ": " + contents);
+                scannedInfo.setText(scanFormat+ ": " +
+                        "" + contents);
                 Toast toast = Toast.makeText(getApplicationContext(), "Сканирование завершено" ,
                         Toast.LENGTH_SHORT);
                 toast.show();

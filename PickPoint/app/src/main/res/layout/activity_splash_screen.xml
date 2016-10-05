@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme.AppBarOverlay"
 
         >
-+
+        +
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -38,16 +38,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp">
+        android:layout_marginTop="180dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="Enter pswd"
+            android:text="Pick Point"
             android:textStyle="bold"
             android:textAlignment="center"
-            android:textSize="10pt"/>
+            android:textSize="16pt"/>
     </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -60,7 +60,7 @@
 
 
 
-        <include layout="@layout/keyboard"/>
+        <!--include layout="@layout/keyboard"/-->
 
     </android.support.design.widget.CoordinatorLayout>
 

@@ -4,7 +4,7 @@
     <string name="address">Адрес:</string>
     <string name="change">Изменить</string>
     <string name="delivery">Готово</string>
-    <string name="recieving">Получить</string>
+    <string name="receiving">Получить</string>
     <string name="returning">Возврат</string>
     <string name="reports">Отчеты</string>
     <string name="wrong_login">Неверный пароль</string>
@@ -14,7 +14,16 @@
 
     <string name="enter_code">Введите код отправления:</string>
     <string name="wrong_delivery_code">Неверный код отправления</string>
-    <string name="price">Стоимость</string>
-    <string name="open">Открытие</string>
+    <string name="price">Оплата:</string>
+    <string name="open">Вскрытие:</string>
+
+    <string name="price_details_paid">товар оплачен</string>
+    <string name="price_details_notpaid">к оплате: </string>
+
+    <string name="open_details_true">вскрытие разрешено</string>
+    <string name="open_details_notpaid">вскрытие запрещено</string>
+
+    <string name="order">оформить</string>
+    <string name="back">возврат</string>
 </resources>
 

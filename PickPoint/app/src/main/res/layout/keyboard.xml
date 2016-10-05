@@ -18,7 +18,7 @@ android:layout_height="fill_parent">
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_marginRight="5pt"
-        android:id="@+id/password"
+        android:id="@+id/editTextPasswd"
         android:layout_width="match_parent"
         android:inputType="numberDecimal">
     </EditText>

@@ -69,35 +69,62 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_pick_point);
+        setContentView(R.layout.menu);
 
-        try {
+      //  Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar.setLogo(R.drawable.icon);
 
-            Boolean startParsing = false;
+      //  setSupportActionBar(toolbar);
+        setAllButtonsToClickable();
 
-            startParsing = isNetworkAvailable(this);
 
-            if(startParsing) {
-                new XmlParser(this).execute();
-            }
-            else {
-                Toast toast = Toast.makeText(getApplicationContext(), this.getString(R.string.no_internet_connection) ,
-                        Toast.LENGTH_SHORT);
+        //try {
 
-                toast.show();
+           // Boolean startParsing = false;
 
-                myLoginDialog.show(fm, "edit");
-                myLoginDialog.setCancelable(false);
+           // startParsing = isNetworkAvailable(this);
 
-            }
+           // if(startParsing) {
+                //new XmlParser(this).execute();
+          //  }
+          //  else {
+             //   Toast toast = Toast.makeText(getApplicationContext(), this.getString(R.string.no_internet_connection) ,
+                 //       Toast.LENGTH_SHORT);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+              //  toast.show();
+
+               // myLoginDialog.show(fm, "edit");
+               // myLoginDialog.setCancelable(true);
+             //   authorized = true;
+               // Log.i("AUTHORISED ", code.toString());
+
+               // ArrayList addresses = (ArrayList) responseArray.get(1);
+
+                //setContentView(R.layout.activity_pick_point);
+
+
+
+              //  myLoginDialog.dismiss();
+
+                //spinner =  (Spinner) findViewById(R.id.address_spinner);
+                //spinner.setOnItemSelectedListener(this);
+
+               // ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                  //      R.layout.support_simple_spinner_dropdown_item, addresses);
+           //     dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+              //  spinner.setAdapter(dataAdapter);
+
+          //  }
+
+       // } catch (Exception e) {
+         //   e.printStackTrace();
+        //}
        // Intent intent = new Intent(PickPointActivity.this, LoginHeadPiece.class);
         //startActivity(intent);
     /**** 28.09 ***/
-        myLoginDialog.show(fm, "edit");
-        myLoginDialog.setCancelable(false);
+       // myLoginDialog.show(fm, "edit");
+      //  myLoginDialog.setCancelable(false);
 
 
     }
@@ -106,6 +133,12 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
     public void showDelivery(View view)
     {
         Intent intent = new Intent(PickPointActivity.this, DeliveryActivity.class);
+        startActivity(intent);
+    }
+
+    public void showReceiving(View view)
+    {
+        Intent intent = new Intent(PickPointActivity.this, ParcelReceivingActivity.class);
         startActivity(intent);
     }
 
@@ -125,7 +158,7 @@ public class PickPointActivity extends AppCompatActivity implements EditAuthDial
 
     protected void setAllButtonsToClickable() {
         deliveryBtn = (Button) findViewById(R.id.deliveryButton);
-        recievingBtn = (Button) findViewById(R.id.recieveButton);
+        recievingBtn = (Button) findViewById(R.id.receiveParcelButton);
         reportsBtn = (Button) findViewById(R.id.reportsButton);
         returningBtn = (Button) findViewById(R.id.returnButton);
 

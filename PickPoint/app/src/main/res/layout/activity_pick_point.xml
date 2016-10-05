@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingTop="50dp"
+    android:paddingTop="0dp"
     android:textSize="8pt"
     android:textColor="#ffffff"
     android:textStyle="bold"
@@ -104,7 +104,7 @@
         >
 
         <Button
-            android:id="@+id/recieveButton"
+            android:id="@+id/receiveParcelButton"
             android:layout_width="155dp"
             android:layout_height="63dp"
             android:layout_marginEnd="8dp"
@@ -114,7 +114,8 @@
             android:textSize="8pt"
             android:textColor="#ffffff"
             android:textStyle="bold"
-            android:text="@string/recieving"/>
+            android:text="@string/receiving"
+            android:onClick="showReceiving"/>
 
         <Button
             android:id="@+id/returnButton"

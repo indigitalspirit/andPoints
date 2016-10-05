@@ -123,7 +123,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Log.i("OkHttp :", result);
+        Log.i("OkHttp :", " "+result);
         //xmlResponse.setText(result);
         // System.out.print(result);
         // Set title into TextView

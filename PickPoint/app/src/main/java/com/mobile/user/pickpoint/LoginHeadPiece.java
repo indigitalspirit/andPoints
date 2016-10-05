@@ -1,6 +1,11 @@
 package com.mobile.user.pickpoint;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -24,9 +30,16 @@ import java.util.ArrayList;
 public class LoginHeadPiece extends AppCompatActivity implements XmlParser.GetDataListener, View.OnClickListener {
 
 
-     EditText loginEdit;
-     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnDel, btnOk;
-     String PB_key = null;
+    //  EditText loginEdit;
+    // Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnDel, btnOk;
+    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnDel, btnOk;
+    EditText loginEdit;
+    String tag = "Edit";
+    String PB_key = null, encryptedJSONstring = null, userLogin = null;
+    Boolean authorized = false;
+    SharedPreferences sp;
+    private TextView selection;
+    Spinner spinner;
 
 
     @Override
@@ -36,7 +49,27 @@ public class LoginHeadPiece extends AppCompatActivity implements XmlParser.GetDa
         setContentView(R.layout.keyboard);
 
 
-        loginEdit = (EditText) findViewById(R.id.password);
+        try {
+
+            Boolean startParsing = false;
+
+            startParsing = isNetworkAvailable(this);
+
+            if (startParsing) {
+                new XmlParser(this).execute();
+            } else {
+                Toast toast = Toast.makeText(getApplicationContext(), this.getString(R.string.no_internet_connection),
+                        Toast.LENGTH_SHORT);
+
+                toast.show();
+
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         btn1 = (Button) findViewById(R.id.btn1);
         btn2 = (Button) findViewById(R.id.btn2);
@@ -50,6 +83,7 @@ public class LoginHeadPiece extends AppCompatActivity implements XmlParser.GetDa
         btn0 = (Button) findViewById(R.id.btn0);
         btnDel = (Button) findViewById(R.id.btnDel);
         btnOk = (Button) findViewById(R.id.btnOk);
+        loginEdit = (EditText) findViewById(R.id.editTextPasswd);
 
 
         // присвоим обработчик кнопке OK (btnOk)
@@ -66,37 +100,153 @@ public class LoginHeadPiece extends AppCompatActivity implements XmlParser.GetDa
         btnOk.setOnClickListener(this);
         btnDel.setOnClickListener(this);
 
+        // Intent intent = new Intent(PickPointActivity.this, LoginHeadPiece.class);
+        //startActivity(intent);
+        /**** 28.09 ***/
 
 
-        /*
-        // создаем обработчик нажатия
-        View.OnClickListener oclBtnOk = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Меняем текст в TextView (tvOut)
-                loginEdit.setText("1");
-                Log.i("LoginDialog", "Нажата кнопка ОК");
-            }
-        };
-        */
+        //  Intent intent = new Intent(LoginHeadPiece.this, PickPointActivity.class);
+        //  startActivity(intent);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setLogo(R.drawable.icon);
 
-        setSupportActionBar(toolbar);
+        // setSupportActionBar(toolbar);
+    }
 
 
-
+    public static boolean isNetworkAvailable(Context context) {
         try {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-            new XmlParser(this).execute();
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            if (null != activeNetwork) {
+                if ((activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) || (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE))
+                    return true;
+            }
+
 
         } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+
+    @Override
+    public void onGetDataComplete(String result, String classTag) throws IOException, JSONException {
+
+        if (result == null) {
+
+            Toast toast = Toast.makeText(getApplicationContext(), this.getString(R.string.no_internet_connection),
+                    Toast.LENGTH_SHORT);
+
+            toast.show();
+        } else {
+
+            if (classTag.contentEquals("xml")) {
+                PB_key = result;
+                Log.i("RESULT ", result);
+            } else if (classTag.contentEquals("json")) {
+                CharSequence code = null;
+                ArrayList responseArray = new ArrayList();
+                Log.i("RESULT JSON", result);
+
+                try {
+
+                    responseArray = new JsonParser().ParseJsonString(result);
+
+                    code = (CharSequence) responseArray.get(0);
+
+
+                    if (code.toString().contentEquals("OK")) {
+                        authorized = true;
+                        Log.i("AUTHORISED ", code.toString());
+                        Intent intent = new Intent(LoginHeadPiece.this, PickPointActivity.class);
+                        startActivity(intent);
+
+                        //ArrayList addresses = (ArrayList) responseArray.get(1);
+
+                        //setContentView(R.layout.activity_pick_point);
+                        //setContentView(R.layout.menu);
+
+                        //  Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                        //  toolbar.setLogo(R.drawable.icon);
+
+                        //setSupportActionBar(toolbar);
+                        // setAllButtonsToClickable();
+                        //myLoginDialog.dismiss();
+
+                        //spinner =  (Spinner) findViewById(R.id.address_spinner);
+                        //spinner.setOnItemSelectedListener(this);
+
+                        //  ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                        //         R.layout.support_simple_spinner_dropdown_item, addresses);
+                        // dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        // spinner.setAdapter(dataAdapter);
+
+
+                    } else if (code.toString().contentEquals("FAIL")) {
+
+                        Log.i("NOT AUTHORISED ", code.toString());
+
+                        Toast toast_2 = Toast.makeText(getApplicationContext(), this.getString(R.string.wrong_login),
+                                Toast.LENGTH_SHORT);
+
+                        toast_2.show();
+
+                        // myLoginDialog.show(fm, "edit");
+
+                        //myLoginDialog.setCancelable(false);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+     /*
+        try {
+
+            Boolean startParsing = false;
+
+            startParsing = isNetworkAvailable(this);
+
+            if (startParsing) {
+               // new XmlParser(this).execute();
+
+
+            } else {
+                Toast toast = Toast.makeText(getApplicationContext(), this.getString(R.string.no_internet_connection),
+                        Toast.LENGTH_SHORT);
+
+                toast.show();
+
+
+            }
+        }
+            catch (Exception e) {
             e.printStackTrace();
         }
 
 
     }
+    */
+
 
     @Override
     public void onClick(View v) {
@@ -146,6 +296,9 @@ public class LoginHeadPiece extends AppCompatActivity implements XmlParser.GetDa
 
             case R.id.btnOk:
                 //setDigitToEditText();
+                String login;
+                login = loginEdit.getText().toString();
+                OnFinishEdit(login);
                 break;
 
             case R.id.btnDel:
@@ -155,6 +308,24 @@ public class LoginHeadPiece extends AppCompatActivity implements XmlParser.GetDa
             default:
                 break;
         }
+
+    }
+
+
+    public void OnFinishEdit(String login) {
+        Log.i("LOGIN", login);
+        userLogin = login;
+
+        CreateEncryptedJSON encryptedJSONcontent = new CreateEncryptedJSON();
+        try {
+            encryptedJSONstring = encryptedJSONcontent.JsonSerialaizer(userLogin, PB_key);
+            Log.i("Created JSON object", encryptedJSONstring);
+            new BackgroundTask(this).execute("http://nastya.boincfast.ru/reciever_json.php", encryptedJSONstring);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -171,7 +342,7 @@ public class LoginHeadPiece extends AppCompatActivity implements XmlParser.GetDa
 
     }
 
-
+    /*
     public void onGetDataComplete(String result, String classTag) throws IOException, JSONException {
 
         if (classTag.contentEquals("xml")) {
@@ -237,6 +408,27 @@ public class LoginHeadPiece extends AppCompatActivity implements XmlParser.GetDa
 
 
     }
+    */
+
+
+    // setContentView(R.layout.keyboard);
+
+
+
+
+
+
+        /*
+        // создаем обработчик нажатия
+        View.OnClickListener oclBtnOk = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Меняем текст в TextView (tvOut)
+                loginEdit.setText("1");
+                Log.i("LoginDialog", "Нажата кнопка ОК");
+            }
+        };
+        */
 
 
 }
