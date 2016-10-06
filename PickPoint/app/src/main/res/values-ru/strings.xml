@@ -25,5 +25,36 @@
 
     <string name="order">оформить</string>
     <string name="back">возврат</string>
+
+
+
+    <!-- activity_pick_pointer_fio -->
+    <string name="adm_enter_fio_msg">Введите ФИО (для работника ПВЗ):</string>
+    <string name="adm_enter_fio_surname">Фамилия:</string>
+    <string name="adm_enter_fio_name">Имя:</string>
+    <string name="adm_enter_fio_secondname">Отчество:</string>
+
+    <string name="adm_enter_fio_button">Готово</string>
+
+
+    <!-- activity_receiver_fio -->
+    <string name="res_enter_fio_msg">Введите ФИО:</string>
+    <string name="res_enter_fio_surname">Фамилия:</string>
+    <string name="res_enter_fio_name">Имя:</string>
+    <string name="res_enter_fio_secondname">Отчество:</string>
+
+    <string name="res_enter_fio_button">Готово</string>
+
+    <string name="res_confirm_msg">Вы подтверждаете прием отправлений (шт.): </string>
+    <string name="res_count_msg"> </string>
+    <string name="res_insert_signature">Подпись:</string>
+
+    <string name="res_erase_signature_button">стереть</string>
+    <string name="res_confirm_signature_button">Accept</string>
+
+
+    <!-- activity_receiver_fio -->
+    <string name="enter_login_msg">Введите пароль:</string>
+
 </resources>
 

@@ -9,25 +9,18 @@
     android:textSize="8pt"
     android:textStyle="bold"
     android:textColor="#ffffff"
-
-
-
     tools:context="com.mobile.user.pickpoint.LoginHeadPiece">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
-
         >
-+
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:label="Enter password"
-
-
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             android:textSize="8pt"
@@ -43,8 +36,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:text="Enter pswd"
+            android:text="@string/enter_login_msg"
             android:textStyle="bold"
             android:textAlignment="center"
             android:textSize="10pt"/>
@@ -54,11 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="130dp">
-
-
-
-
-
 
         <include layout="@layout/keyboard"/>
 

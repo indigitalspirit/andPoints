@@ -31,6 +31,8 @@
         <activity android:name=".ParcelFormalizeActivity"/>
         <activity android:name=".ParcelReceivingActivity"/>
         <activity android:name=".LoginHeadPiece"/>
+        <activity android:name=".ParcelPickPointerFioActivity"/>
+        <activity android:name=".ParcelReceiverFIOActivity"/>
 
     </application>
 

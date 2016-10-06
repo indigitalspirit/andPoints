@@ -24,4 +24,31 @@
 
     <string name="order">order</string>
     <string name="back">back</string>
+
+
+    <!-- activity_pick_pointer_fio -->
+    <string name="adm_enter_fio_msg">Enter full name (for administrator):</string>
+    <string name="adm_enter_fio_surname">Surname:</string>
+    <string name="adm_enter_fio_name">Name:</string>
+    <string name="adm_enter_fio_secondname">Second name:</string>
+
+    <string name="adm_enter_fio_button">Ok</string>
+
+
+    <!-- activity_receiver_fio -->
+    <string name="res_enter_fio_msg">Enter full name:</string>
+    <string name="res_enter_fio_surname">Surname:</string>
+    <string name="res_enter_fio_name">Name:</string>
+    <string name="res_enter_fio_secondname">Second name:</string>
+
+    <string name="res_confirm_msg">You agree to receive items (count):</string>
+    <string name="res_count_msg"> </string>
+    <string name="res_insert_signature">Signature: </string>
+
+    <string name="res_erase_signature_button">Erase signature</string>
+    <string name="res_confirm_signature_button">Accept</string>
+
+
+    <!-- activity_login_head_piece -->
+    <string name="enter_login_msg">Enter password:</string>
 </resources>

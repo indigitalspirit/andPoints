@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="Pick Point"
+            android:text="@string/app_label"
             android:textStyle="bold"
             android:textAlignment="center"
             android:textSize="16pt"/>
@@ -54,12 +54,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="130dp">
-
-
-
-
-
-
         <!--include layout="@layout/keyboard"/-->
 
     </android.support.design.widget.CoordinatorLayout>
